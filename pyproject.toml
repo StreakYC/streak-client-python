@@ -1,14 +1,20 @@
 [project]
 name = "streak_crm"
 dynamic = ["version"]
+license = "MIT"
+license-files = ["LICENSE"]
 
 [tool.poetry]
 name = "streak_crm"
-version = "0.8.0"
+version = "0.8.1"
 description = ""
 readme = "README.md"
 authors = []
-keywords = []
+keywords = [
+    "api",
+    "sdk",
+    "client"
+]
 classifiers = [
     "Intended Audience :: Developers",
     "Programming Language :: Python",
@@ -32,6 +38,7 @@ packages = [
 ]
 
 [tool.poetry.urls]
+Homepage = 'https://www.streak.com/'
 Repository = 'https://github.com/StreakYC/streak-client-python'
 
 [tool.poetry.dependencies]
