@@ -15,28 +15,28 @@ from ..types.pipeline_field_tag_settings_update import PipelineFieldTagSettingsU
 from ..types.pipeline_list_response import PipelineListResponse
 from ..types.pipeline_permission_set_input import PipelinePermissionSetInput
 from ..types.pipeline_sharing_entry_input import PipelineSharingEntryInput
-from .raw_client import AsyncRawPipelineClient, RawPipelineClient
+from .raw_client import AsyncRawPipelinesClient, RawPipelinesClient
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
 
-class PipelineClient:
+class PipelinesClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
-        self._raw_client = RawPipelineClient(client_wrapper=client_wrapper)
+        self._raw_client = RawPipelinesClient(client_wrapper=client_wrapper)
 
     @property
-    def with_raw_response(self) -> RawPipelineClient:
+    def with_raw_response(self) -> RawPipelinesClient:
         """
         Retrieves a raw implementation of this client that returns raw responses.
 
         Returns
         -------
-        RawPipelineClient
+        RawPipelinesClient
         """
         return self._raw_client
 
-    def list_pipeline_fields(
+    def list_fields(
         self, pipeline_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> typing.List[PipelineField]:
         """
@@ -61,14 +61,14 @@ class PipelineClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.pipeline.list_pipeline_fields(
+        client.pipelines.list_fields(
             pipeline_key="pipelineKey",
         )
         """
-        _response = self._raw_client.list_pipeline_fields(pipeline_key, request_options=request_options)
+        _response = self._raw_client.list_fields(pipeline_key, request_options=request_options)
         return _response.data
 
-    def get_pipeline_field(
+    def get_field(
         self, pipeline_key: str, field_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> PipelineField:
         """
@@ -95,15 +95,15 @@ class PipelineClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.pipeline.get_pipeline_field(
+        client.pipelines.get_field(
             pipeline_key="pipelineKey",
             field_key="fieldKey",
         )
         """
-        _response = self._raw_client.get_pipeline_field(pipeline_key, field_key, request_options=request_options)
+        _response = self._raw_client.get_field(pipeline_key, field_key, request_options=request_options)
         return _response.data
 
-    def update_pipeline_field(
+    def update_field(
         self,
         pipeline_key: str,
         field_key: str,
@@ -158,12 +158,12 @@ class PipelineClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.pipeline.update_pipeline_field(
+        client.pipelines.update_field(
             pipeline_key="pipelineKey",
             field_key="fieldKey",
         )
         """
-        _response = self._raw_client.update_pipeline_field(
+        _response = self._raw_client.update_field(
             pipeline_key,
             field_key,
             add_only=add_only,
@@ -176,7 +176,7 @@ class PipelineClient:
         )
         return _response.data
 
-    def delete_pipeline_field(
+    def delete_field(
         self, pipeline_key: str, field_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> OperationResponse:
         """
@@ -203,12 +203,12 @@ class PipelineClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.pipeline.delete_pipeline_field(
+        client.pipelines.delete_field(
             pipeline_key="pipelineKey",
             field_key="fieldKey",
         )
         """
-        _response = self._raw_client.delete_pipeline_field(pipeline_key, field_key, request_options=request_options)
+        _response = self._raw_client.delete_field(pipeline_key, field_key, request_options=request_options)
         return _response.data
 
     def list_pipelines(
@@ -247,7 +247,7 @@ class PipelineClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.pipeline.list_pipelines()
+        client.pipelines.list_pipelines()
         """
         _response = self._raw_client.list_pipelines(
             sort_by=sort_by, limit=limit, page=page, request_options=request_options
@@ -267,7 +267,7 @@ class PipelineClient:
         default_permission_set_name: typing.Optional[str] = OMIT,
         sharing_restricted_to_team: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> None:
+    ) -> Pipeline:
         """
         Creates a basic pipeline.
 
@@ -305,7 +305,8 @@ class PipelineClient:
 
         Returns
         -------
-        None
+        Pipeline
+            The created pipeline.
 
         Examples
         --------
@@ -314,7 +315,7 @@ class PipelineClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.pipeline.create_pipeline(
+        client.pipelines.create_pipeline(
             name="name",
             team_key="teamKey",
             stages=["stages"],
@@ -357,7 +358,7 @@ class PipelineClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.pipeline.get_pipeline(
+        client.pipelines.get_pipeline(
             pipeline_key="pipelineKey",
         )
         """
@@ -432,7 +433,7 @@ class PipelineClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.pipeline.update_pipeline(
+        client.pipelines.update_pipeline(
             pipeline_key="pipelineKey",
         )
         """
@@ -477,14 +478,14 @@ class PipelineClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.pipeline.delete_pipeline(
+        client.pipelines.delete_pipeline(
             pipeline_key="pipelineKey",
         )
         """
         _response = self._raw_client.delete_pipeline(pipeline_key, request_options=request_options)
         return _response.data
 
-    def create_pipeline_field(
+    def create_field(
         self,
         pipeline_key: str,
         *,
@@ -524,34 +525,34 @@ class PipelineClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.pipeline.create_pipeline_field(
+        client.pipelines.create_field(
             pipeline_key="pipelineKey",
             name="name",
             type="TEXT_INPUT",
         )
         """
-        _response = self._raw_client.create_pipeline_field(
+        _response = self._raw_client.create_field(
             pipeline_key, name=name, type=type, default_value=default_value, request_options=request_options
         )
         return _response.data
 
 
-class AsyncPipelineClient:
+class AsyncPipelinesClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
-        self._raw_client = AsyncRawPipelineClient(client_wrapper=client_wrapper)
+        self._raw_client = AsyncRawPipelinesClient(client_wrapper=client_wrapper)
 
     @property
-    def with_raw_response(self) -> AsyncRawPipelineClient:
+    def with_raw_response(self) -> AsyncRawPipelinesClient:
         """
         Retrieves a raw implementation of this client that returns raw responses.
 
         Returns
         -------
-        AsyncRawPipelineClient
+        AsyncRawPipelinesClient
         """
         return self._raw_client
 
-    async def list_pipeline_fields(
+    async def list_fields(
         self, pipeline_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> typing.List[PipelineField]:
         """
@@ -581,17 +582,17 @@ class AsyncPipelineClient:
 
 
         async def main() -> None:
-            await client.pipeline.list_pipeline_fields(
+            await client.pipelines.list_fields(
                 pipeline_key="pipelineKey",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.list_pipeline_fields(pipeline_key, request_options=request_options)
+        _response = await self._raw_client.list_fields(pipeline_key, request_options=request_options)
         return _response.data
 
-    async def get_pipeline_field(
+    async def get_field(
         self, pipeline_key: str, field_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> PipelineField:
         """
@@ -623,7 +624,7 @@ class AsyncPipelineClient:
 
 
         async def main() -> None:
-            await client.pipeline.get_pipeline_field(
+            await client.pipelines.get_field(
                 pipeline_key="pipelineKey",
                 field_key="fieldKey",
             )
@@ -631,10 +632,10 @@ class AsyncPipelineClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.get_pipeline_field(pipeline_key, field_key, request_options=request_options)
+        _response = await self._raw_client.get_field(pipeline_key, field_key, request_options=request_options)
         return _response.data
 
-    async def update_pipeline_field(
+    async def update_field(
         self,
         pipeline_key: str,
         field_key: str,
@@ -694,7 +695,7 @@ class AsyncPipelineClient:
 
 
         async def main() -> None:
-            await client.pipeline.update_pipeline_field(
+            await client.pipelines.update_field(
                 pipeline_key="pipelineKey",
                 field_key="fieldKey",
             )
@@ -702,7 +703,7 @@ class AsyncPipelineClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.update_pipeline_field(
+        _response = await self._raw_client.update_field(
             pipeline_key,
             field_key,
             add_only=add_only,
@@ -715,7 +716,7 @@ class AsyncPipelineClient:
         )
         return _response.data
 
-    async def delete_pipeline_field(
+    async def delete_field(
         self, pipeline_key: str, field_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> OperationResponse:
         """
@@ -747,7 +748,7 @@ class AsyncPipelineClient:
 
 
         async def main() -> None:
-            await client.pipeline.delete_pipeline_field(
+            await client.pipelines.delete_field(
                 pipeline_key="pipelineKey",
                 field_key="fieldKey",
             )
@@ -755,9 +756,7 @@ class AsyncPipelineClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.delete_pipeline_field(
-            pipeline_key, field_key, request_options=request_options
-        )
+        _response = await self._raw_client.delete_field(pipeline_key, field_key, request_options=request_options)
         return _response.data
 
     async def list_pipelines(
@@ -801,7 +800,7 @@ class AsyncPipelineClient:
 
 
         async def main() -> None:
-            await client.pipeline.list_pipelines()
+            await client.pipelines.list_pipelines()
 
 
         asyncio.run(main())
@@ -824,7 +823,7 @@ class AsyncPipelineClient:
         default_permission_set_name: typing.Optional[str] = OMIT,
         sharing_restricted_to_team: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> None:
+    ) -> Pipeline:
         """
         Creates a basic pipeline.
 
@@ -862,7 +861,8 @@ class AsyncPipelineClient:
 
         Returns
         -------
-        None
+        Pipeline
+            The created pipeline.
 
         Examples
         --------
@@ -876,7 +876,7 @@ class AsyncPipelineClient:
 
 
         async def main() -> None:
-            await client.pipeline.create_pipeline(
+            await client.pipelines.create_pipeline(
                 name="name",
                 team_key="teamKey",
                 stages=["stages"],
@@ -929,7 +929,7 @@ class AsyncPipelineClient:
 
 
         async def main() -> None:
-            await client.pipeline.get_pipeline(
+            await client.pipelines.get_pipeline(
                 pipeline_key="pipelineKey",
             )
 
@@ -1012,7 +1012,7 @@ class AsyncPipelineClient:
 
 
         async def main() -> None:
-            await client.pipeline.update_pipeline(
+            await client.pipelines.update_pipeline(
                 pipeline_key="pipelineKey",
             )
 
@@ -1065,7 +1065,7 @@ class AsyncPipelineClient:
 
 
         async def main() -> None:
-            await client.pipeline.delete_pipeline(
+            await client.pipelines.delete_pipeline(
                 pipeline_key="pipelineKey",
             )
 
@@ -1075,7 +1075,7 @@ class AsyncPipelineClient:
         _response = await self._raw_client.delete_pipeline(pipeline_key, request_options=request_options)
         return _response.data
 
-    async def create_pipeline_field(
+    async def create_field(
         self,
         pipeline_key: str,
         *,
@@ -1120,7 +1120,7 @@ class AsyncPipelineClient:
 
 
         async def main() -> None:
-            await client.pipeline.create_pipeline_field(
+            await client.pipelines.create_field(
                 pipeline_key="pipelineKey",
                 name="name",
                 type="TEXT_INPUT",
@@ -1129,7 +1129,7 @@ class AsyncPipelineClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.create_pipeline_field(
+        _response = await self._raw_client.create_field(
             pipeline_key, name=name, type=type, default_value=default_value, request_options=request_options
         )
         return _response.data

@@ -29,7 +29,7 @@ class MeetingsClient:
         """
         return self._raw_client
 
-    def list_meetings(
+    def get_meetings(
         self,
         box_key: str,
         *,
@@ -65,11 +65,11 @@ class MeetingsClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.meetings.list_meetings(
+        client.meetings.get_meetings(
             box_key="boxKey",
         )
         """
-        _response = self._raw_client.list_meetings(box_key, limit=limit, page=page, request_options=request_options)
+        _response = self._raw_client.get_meetings(box_key, limit=limit, page=page, request_options=request_options)
         return _response.data
 
     def create_meeting(
@@ -288,7 +288,7 @@ class AsyncMeetingsClient:
         """
         return self._raw_client
 
-    async def list_meetings(
+    async def get_meetings(
         self,
         box_key: str,
         *,
@@ -329,14 +329,14 @@ class AsyncMeetingsClient:
 
 
         async def main() -> None:
-            await client.meetings.list_meetings(
+            await client.meetings.get_meetings(
                 box_key="boxKey",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.list_meetings(
+        _response = await self._raw_client.get_meetings(
             box_key, limit=limit, page=page, request_options=request_options
         )
         return _response.data

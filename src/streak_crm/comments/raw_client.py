@@ -25,7 +25,7 @@ class RawCommentsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def list_comments(
+    def get_comments(
         self, box_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> HttpResponse[CommentListResponse]:
         """
@@ -339,7 +339,7 @@ class RawCommentsClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def remove_comment_reaction(
+    def unreact_to_comment(
         self, comment_key: str, *, emoji: str, request_options: typing.Optional[RequestOptions] = None
     ) -> HttpResponse[Comment]:
         """
@@ -396,7 +396,7 @@ class AsyncRawCommentsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def list_comments(
+    async def get_comments(
         self, box_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[CommentListResponse]:
         """
@@ -710,7 +710,7 @@ class AsyncRawCommentsClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def remove_comment_reaction(
+    async def unreact_to_comment(
         self, comment_key: str, *, emoji: str, request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[Comment]:
         """

@@ -7,20 +7,22 @@ import typing
 import httpx
 from .core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from .core.logging import LogConfig, Logger
+from .core.request_options import RequestOptions
 from .environment import StreakEnvironment
+from .raw_client import AsyncRawStreak, RawStreak
+from .types.search_response import SearchResponse
 
 if typing.TYPE_CHECKING:
     from .api_keys.client import ApiKeysClient, AsyncApiKeysClient
     from .boxes.client import AsyncBoxesClient, BoxesClient
     from .comments.client import AsyncCommentsClient, CommentsClient
-    from .contact.client import AsyncContactClient, ContactClient
+    from .contacts.client import AsyncContactsClient, ContactsClient
     from .meetings.client import AsyncMeetingsClient, MeetingsClient
-    from .organization.client import AsyncOrganizationClient, OrganizationClient
-    from .pipeline.client import AsyncPipelineClient, PipelineClient
-    from .pipeline_stage.client import AsyncPipelineStageClient, PipelineStageClient
-    from .search.client import AsyncSearchClient, SearchClient
+    from .organizations.client import AsyncOrganizationsClient, OrganizationsClient
+    from .pipeline_stages.client import AsyncPipelineStagesClient, PipelineStagesClient
+    from .pipelines.client import AsyncPipelinesClient, PipelinesClient
     from .tasks.client import AsyncTasksClient, TasksClient
-    from .team.client import AsyncTeamClient, TeamClient
+    from .teams.client import AsyncTeamsClient, TeamsClient
     from .users.client import AsyncUsersClient, UsersClient
 
 
@@ -108,18 +110,91 @@ class Streak:
             max_stream_reconnection_attempts=max_stream_reconnection_attempts,
             logging=logging,
         )
+        self._raw_client = RawStreak(client_wrapper=self._client_wrapper)
         self._api_keys: typing.Optional[ApiKeysClient] = None
         self._boxes: typing.Optional[BoxesClient] = None
-        self._pipeline: typing.Optional[PipelineClient] = None
-        self._search: typing.Optional[SearchClient] = None
+        self._pipelines: typing.Optional[PipelinesClient] = None
         self._users: typing.Optional[UsersClient] = None
         self._comments: typing.Optional[CommentsClient] = None
         self._meetings: typing.Optional[MeetingsClient] = None
         self._tasks: typing.Optional[TasksClient] = None
-        self._contact: typing.Optional[ContactClient] = None
-        self._organization: typing.Optional[OrganizationClient] = None
-        self._pipeline_stage: typing.Optional[PipelineStageClient] = None
-        self._team: typing.Optional[TeamClient] = None
+        self._contacts: typing.Optional[ContactsClient] = None
+        self._organizations: typing.Optional[OrganizationsClient] = None
+        self._pipeline_stages: typing.Optional[PipelineStagesClient] = None
+        self._teams: typing.Optional[TeamsClient] = None
+
+    @property
+    def with_raw_response(self) -> RawStreak:
+        """
+        Retrieves a raw implementation of this client that returns raw responses.
+
+        Returns
+        -------
+        RawStreak
+        """
+        return self._raw_client
+
+    def search(
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        pipeline_key: typing.Optional[typing.Sequence[str]] = None,
+        query: typing.Optional[str] = None,
+        stage_key: typing.Optional[typing.Sequence[str]] = None,
+        team_key: typing.Optional[typing.Sequence[str]] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> SearchResponse:
+        """
+        Searches visible boxes, contacts, and organizations by query, or visible boxes by exact name. Exactly one of query or name must be provided.
+
+        Parameters
+        ----------
+        name : typing.Optional[str]
+            Exact box name to search for.
+
+        page : typing.Optional[int]
+            Zero-based page number.
+
+        pipeline_key : typing.Optional[typing.Sequence[str]]
+            Pipeline keys to constrain the search to.
+
+        query : typing.Optional[str]
+            Full-text query to search across boxes, contacts, and organizations.
+
+        stage_key : typing.Optional[typing.Sequence[str]]
+            Stage keys to constrain the search to.
+
+        team_key : typing.Optional[typing.Sequence[str]]
+            Team keys to constrain the search to.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        SearchResponse
+            OK
+
+        Examples
+        --------
+        from streak_crm import Streak
+
+        client = Streak(
+            token="YOUR_TOKEN",
+        )
+        client.search()
+        """
+        _response = self._raw_client.search(
+            name=name,
+            page=page,
+            pipeline_key=pipeline_key,
+            query=query,
+            stage_key=stage_key,
+            team_key=team_key,
+            request_options=request_options,
+        )
+        return _response.data
 
     @property
     def api_keys(self):
@@ -138,20 +213,12 @@ class Streak:
         return self._boxes
 
     @property
-    def pipeline(self):
-        if self._pipeline is None:
-            from .pipeline.client import PipelineClient  # noqa: E402
+    def pipelines(self):
+        if self._pipelines is None:
+            from .pipelines.client import PipelinesClient  # noqa: E402
 
-            self._pipeline = PipelineClient(client_wrapper=self._client_wrapper)
-        return self._pipeline
-
-    @property
-    def search(self):
-        if self._search is None:
-            from .search.client import SearchClient  # noqa: E402
-
-            self._search = SearchClient(client_wrapper=self._client_wrapper)
-        return self._search
+            self._pipelines = PipelinesClient(client_wrapper=self._client_wrapper)
+        return self._pipelines
 
     @property
     def users(self):
@@ -186,36 +253,36 @@ class Streak:
         return self._tasks
 
     @property
-    def contact(self):
-        if self._contact is None:
-            from .contact.client import ContactClient  # noqa: E402
+    def contacts(self):
+        if self._contacts is None:
+            from .contacts.client import ContactsClient  # noqa: E402
 
-            self._contact = ContactClient(client_wrapper=self._client_wrapper)
-        return self._contact
-
-    @property
-    def organization(self):
-        if self._organization is None:
-            from .organization.client import OrganizationClient  # noqa: E402
-
-            self._organization = OrganizationClient(client_wrapper=self._client_wrapper)
-        return self._organization
+            self._contacts = ContactsClient(client_wrapper=self._client_wrapper)
+        return self._contacts
 
     @property
-    def pipeline_stage(self):
-        if self._pipeline_stage is None:
-            from .pipeline_stage.client import PipelineStageClient  # noqa: E402
+    def organizations(self):
+        if self._organizations is None:
+            from .organizations.client import OrganizationsClient  # noqa: E402
 
-            self._pipeline_stage = PipelineStageClient(client_wrapper=self._client_wrapper)
-        return self._pipeline_stage
+            self._organizations = OrganizationsClient(client_wrapper=self._client_wrapper)
+        return self._organizations
 
     @property
-    def team(self):
-        if self._team is None:
-            from .team.client import TeamClient  # noqa: E402
+    def pipeline_stages(self):
+        if self._pipeline_stages is None:
+            from .pipeline_stages.client import PipelineStagesClient  # noqa: E402
 
-            self._team = TeamClient(client_wrapper=self._client_wrapper)
-        return self._team
+            self._pipeline_stages = PipelineStagesClient(client_wrapper=self._client_wrapper)
+        return self._pipeline_stages
+
+    @property
+    def teams(self):
+        if self._teams is None:
+            from .teams.client import TeamsClient  # noqa: E402
+
+            self._teams = TeamsClient(client_wrapper=self._client_wrapper)
+        return self._teams
 
 
 def _make_default_async_client(
@@ -323,18 +390,99 @@ class AsyncStreak:
             max_stream_reconnection_attempts=max_stream_reconnection_attempts,
             logging=logging,
         )
+        self._raw_client = AsyncRawStreak(client_wrapper=self._client_wrapper)
         self._api_keys: typing.Optional[AsyncApiKeysClient] = None
         self._boxes: typing.Optional[AsyncBoxesClient] = None
-        self._pipeline: typing.Optional[AsyncPipelineClient] = None
-        self._search: typing.Optional[AsyncSearchClient] = None
+        self._pipelines: typing.Optional[AsyncPipelinesClient] = None
         self._users: typing.Optional[AsyncUsersClient] = None
         self._comments: typing.Optional[AsyncCommentsClient] = None
         self._meetings: typing.Optional[AsyncMeetingsClient] = None
         self._tasks: typing.Optional[AsyncTasksClient] = None
-        self._contact: typing.Optional[AsyncContactClient] = None
-        self._organization: typing.Optional[AsyncOrganizationClient] = None
-        self._pipeline_stage: typing.Optional[AsyncPipelineStageClient] = None
-        self._team: typing.Optional[AsyncTeamClient] = None
+        self._contacts: typing.Optional[AsyncContactsClient] = None
+        self._organizations: typing.Optional[AsyncOrganizationsClient] = None
+        self._pipeline_stages: typing.Optional[AsyncPipelineStagesClient] = None
+        self._teams: typing.Optional[AsyncTeamsClient] = None
+
+    @property
+    def with_raw_response(self) -> AsyncRawStreak:
+        """
+        Retrieves a raw implementation of this client that returns raw responses.
+
+        Returns
+        -------
+        AsyncRawStreak
+        """
+        return self._raw_client
+
+    async def search(
+        self,
+        *,
+        name: typing.Optional[str] = None,
+        page: typing.Optional[int] = None,
+        pipeline_key: typing.Optional[typing.Sequence[str]] = None,
+        query: typing.Optional[str] = None,
+        stage_key: typing.Optional[typing.Sequence[str]] = None,
+        team_key: typing.Optional[typing.Sequence[str]] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> SearchResponse:
+        """
+        Searches visible boxes, contacts, and organizations by query, or visible boxes by exact name. Exactly one of query or name must be provided.
+
+        Parameters
+        ----------
+        name : typing.Optional[str]
+            Exact box name to search for.
+
+        page : typing.Optional[int]
+            Zero-based page number.
+
+        pipeline_key : typing.Optional[typing.Sequence[str]]
+            Pipeline keys to constrain the search to.
+
+        query : typing.Optional[str]
+            Full-text query to search across boxes, contacts, and organizations.
+
+        stage_key : typing.Optional[typing.Sequence[str]]
+            Stage keys to constrain the search to.
+
+        team_key : typing.Optional[typing.Sequence[str]]
+            Team keys to constrain the search to.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        SearchResponse
+            OK
+
+        Examples
+        --------
+        import asyncio
+
+        from streak_crm import AsyncStreak
+
+        client = AsyncStreak(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.search()
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.search(
+            name=name,
+            page=page,
+            pipeline_key=pipeline_key,
+            query=query,
+            stage_key=stage_key,
+            team_key=team_key,
+            request_options=request_options,
+        )
+        return _response.data
 
     @property
     def api_keys(self):
@@ -353,20 +501,12 @@ class AsyncStreak:
         return self._boxes
 
     @property
-    def pipeline(self):
-        if self._pipeline is None:
-            from .pipeline.client import AsyncPipelineClient  # noqa: E402
+    def pipelines(self):
+        if self._pipelines is None:
+            from .pipelines.client import AsyncPipelinesClient  # noqa: E402
 
-            self._pipeline = AsyncPipelineClient(client_wrapper=self._client_wrapper)
-        return self._pipeline
-
-    @property
-    def search(self):
-        if self._search is None:
-            from .search.client import AsyncSearchClient  # noqa: E402
-
-            self._search = AsyncSearchClient(client_wrapper=self._client_wrapper)
-        return self._search
+            self._pipelines = AsyncPipelinesClient(client_wrapper=self._client_wrapper)
+        return self._pipelines
 
     @property
     def users(self):
@@ -401,36 +541,36 @@ class AsyncStreak:
         return self._tasks
 
     @property
-    def contact(self):
-        if self._contact is None:
-            from .contact.client import AsyncContactClient  # noqa: E402
+    def contacts(self):
+        if self._contacts is None:
+            from .contacts.client import AsyncContactsClient  # noqa: E402
 
-            self._contact = AsyncContactClient(client_wrapper=self._client_wrapper)
-        return self._contact
-
-    @property
-    def organization(self):
-        if self._organization is None:
-            from .organization.client import AsyncOrganizationClient  # noqa: E402
-
-            self._organization = AsyncOrganizationClient(client_wrapper=self._client_wrapper)
-        return self._organization
+            self._contacts = AsyncContactsClient(client_wrapper=self._client_wrapper)
+        return self._contacts
 
     @property
-    def pipeline_stage(self):
-        if self._pipeline_stage is None:
-            from .pipeline_stage.client import AsyncPipelineStageClient  # noqa: E402
+    def organizations(self):
+        if self._organizations is None:
+            from .organizations.client import AsyncOrganizationsClient  # noqa: E402
 
-            self._pipeline_stage = AsyncPipelineStageClient(client_wrapper=self._client_wrapper)
-        return self._pipeline_stage
+            self._organizations = AsyncOrganizationsClient(client_wrapper=self._client_wrapper)
+        return self._organizations
 
     @property
-    def team(self):
-        if self._team is None:
-            from .team.client import AsyncTeamClient  # noqa: E402
+    def pipeline_stages(self):
+        if self._pipeline_stages is None:
+            from .pipeline_stages.client import AsyncPipelineStagesClient  # noqa: E402
 
-            self._team = AsyncTeamClient(client_wrapper=self._client_wrapper)
-        return self._team
+            self._pipeline_stages = AsyncPipelineStagesClient(client_wrapper=self._client_wrapper)
+        return self._pipeline_stages
+
+    @property
+    def teams(self):
+        if self._teams is None:
+            from .teams.client import AsyncTeamsClient  # noqa: E402
+
+            self._teams = AsyncTeamsClient(client_wrapper=self._client_wrapper)
+        return self._teams
 
 
 def _get_base_url(*, base_url: typing.Optional[str] = None, environment: StreakEnvironment) -> str:

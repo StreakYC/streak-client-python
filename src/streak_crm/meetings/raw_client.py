@@ -24,7 +24,7 @@ class RawMeetingsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def list_meetings(
+    def get_meetings(
         self,
         box_key: str,
         *,
@@ -332,7 +332,7 @@ class AsyncRawMeetingsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def list_meetings(
+    async def get_meetings(
         self,
         box_key: str,
         *,

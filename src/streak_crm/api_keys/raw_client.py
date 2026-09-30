@@ -19,7 +19,7 @@ class RawApiKeysClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def list_api_keys(
+    def get_api_keys(
         self,
         *,
         limit: typing.Optional[int] = None,
@@ -165,7 +165,7 @@ class AsyncRawApiKeysClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def list_api_keys(
+    async def get_api_keys(
         self,
         *,
         limit: typing.Optional[int] = None,

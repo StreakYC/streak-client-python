@@ -29,7 +29,7 @@ class TasksClient:
         """
         return self._raw_client
 
-    def list_box_tasks(
+    def get_tasks_for_box(
         self,
         box_key: str,
         *,
@@ -66,11 +66,11 @@ class TasksClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.tasks.list_box_tasks(
+        client.tasks.get_tasks_for_box(
             box_key="boxKey",
         )
         """
-        _response = self._raw_client.list_box_tasks(box_key, limit=limit, page=page, request_options=request_options)
+        _response = self._raw_client.get_tasks_for_box(box_key, limit=limit, page=page, request_options=request_options)
         return _response.data
 
     def create_task(
@@ -147,7 +147,7 @@ class TasksClient:
         )
         return _response.data
 
-    def list_upcoming_tasks(
+    def get_assigned_tasks(
         self,
         *,
         direction: typing.Optional[str] = None,
@@ -196,9 +196,9 @@ class TasksClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.tasks.list_upcoming_tasks()
+        client.tasks.get_assigned_tasks()
         """
-        _response = self._raw_client.list_upcoming_tasks(
+        _response = self._raw_client.get_assigned_tasks(
             direction=direction,
             include_completed=include_completed,
             limit=limit,
@@ -362,7 +362,7 @@ class AsyncTasksClient:
         """
         return self._raw_client
 
-    async def list_box_tasks(
+    async def get_tasks_for_box(
         self,
         box_key: str,
         *,
@@ -404,14 +404,14 @@ class AsyncTasksClient:
 
 
         async def main() -> None:
-            await client.tasks.list_box_tasks(
+            await client.tasks.get_tasks_for_box(
                 box_key="boxKey",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.list_box_tasks(
+        _response = await self._raw_client.get_tasks_for_box(
             box_key, limit=limit, page=page, request_options=request_options
         )
         return _response.data
@@ -498,7 +498,7 @@ class AsyncTasksClient:
         )
         return _response.data
 
-    async def list_upcoming_tasks(
+    async def get_assigned_tasks(
         self,
         *,
         direction: typing.Optional[str] = None,
@@ -552,12 +552,12 @@ class AsyncTasksClient:
 
 
         async def main() -> None:
-            await client.tasks.list_upcoming_tasks()
+            await client.tasks.get_assigned_tasks()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.list_upcoming_tasks(
+        _response = await self._raw_client.get_assigned_tasks(
             direction=direction,
             include_completed=include_completed,
             limit=limit,

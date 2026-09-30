@@ -25,7 +25,7 @@ class RawTasksClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def list_box_tasks(
+    def get_tasks_for_box(
         self,
         box_key: str,
         *,
@@ -171,7 +171,7 @@ class RawTasksClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def list_upcoming_tasks(
+    def get_assigned_tasks(
         self,
         *,
         direction: typing.Optional[str] = None,
@@ -422,7 +422,7 @@ class AsyncRawTasksClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def list_box_tasks(
+    async def get_tasks_for_box(
         self,
         box_key: str,
         *,
@@ -568,7 +568,7 @@ class AsyncRawTasksClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def list_upcoming_tasks(
+    async def get_assigned_tasks(
         self,
         *,
         direction: typing.Optional[str] = None,

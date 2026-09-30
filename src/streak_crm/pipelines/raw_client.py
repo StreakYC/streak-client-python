@@ -28,11 +28,11 @@ from pydantic import ValidationError
 OMIT = typing.cast(typing.Any, ...)
 
 
-class RawPipelineClient:
+class RawPipelinesClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def list_pipeline_fields(
+    def list_fields(
         self, pipeline_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> HttpResponse[typing.List[PipelineField]]:
         """
@@ -74,7 +74,7 @@ class RawPipelineClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def get_pipeline_field(
+    def get_field(
         self, pipeline_key: str, field_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> HttpResponse[PipelineField]:
         """
@@ -118,7 +118,7 @@ class RawPipelineClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def update_pipeline_field(
+    def update_field(
         self,
         pipeline_key: str,
         field_key: str,
@@ -212,7 +212,7 @@ class RawPipelineClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def delete_pipeline_field(
+    def delete_field(
         self, pipeline_key: str, field_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> HttpResponse[OperationResponse]:
         """
@@ -327,7 +327,7 @@ class RawPipelineClient:
         default_permission_set_name: typing.Optional[str] = OMIT,
         sharing_restricted_to_team: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[None]:
+    ) -> HttpResponse[Pipeline]:
         """
         Creates a basic pipeline.
 
@@ -365,7 +365,8 @@ class RawPipelineClient:
 
         Returns
         -------
-        HttpResponse[None]
+        HttpResponse[Pipeline]
+            The created pipeline.
         """
         _response = self._client_wrapper.httpx_client.request(
             "v2/pipelines",
@@ -391,7 +392,14 @@ class RawPipelineClient:
         )
         try:
             if 200 <= _response.status_code < 300:
-                return HttpResponse(response=_response, data=None)
+                _data = typing.cast(
+                    Pipeline,
+                    parse_obj_as(
+                        type_=Pipeline,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
@@ -594,7 +602,7 @@ class RawPipelineClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def create_pipeline_field(
+    def create_field(
         self,
         pipeline_key: str,
         *,
@@ -661,11 +669,11 @@ class RawPipelineClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
 
-class AsyncRawPipelineClient:
+class AsyncRawPipelinesClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def list_pipeline_fields(
+    async def list_fields(
         self, pipeline_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[typing.List[PipelineField]]:
         """
@@ -707,7 +715,7 @@ class AsyncRawPipelineClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def get_pipeline_field(
+    async def get_field(
         self, pipeline_key: str, field_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[PipelineField]:
         """
@@ -751,7 +759,7 @@ class AsyncRawPipelineClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def update_pipeline_field(
+    async def update_field(
         self,
         pipeline_key: str,
         field_key: str,
@@ -845,7 +853,7 @@ class AsyncRawPipelineClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def delete_pipeline_field(
+    async def delete_field(
         self, pipeline_key: str, field_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[OperationResponse]:
         """
@@ -960,7 +968,7 @@ class AsyncRawPipelineClient:
         default_permission_set_name: typing.Optional[str] = OMIT,
         sharing_restricted_to_team: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[None]:
+    ) -> AsyncHttpResponse[Pipeline]:
         """
         Creates a basic pipeline.
 
@@ -998,7 +1006,8 @@ class AsyncRawPipelineClient:
 
         Returns
         -------
-        AsyncHttpResponse[None]
+        AsyncHttpResponse[Pipeline]
+            The created pipeline.
         """
         _response = await self._client_wrapper.httpx_client.request(
             "v2/pipelines",
@@ -1024,7 +1033,14 @@ class AsyncRawPipelineClient:
         )
         try:
             if 200 <= _response.status_code < 300:
-                return AsyncHttpResponse(response=_response, data=None)
+                _data = typing.cast(
+                    Pipeline,
+                    parse_obj_as(
+                        type_=Pipeline,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
@@ -1227,7 +1243,7 @@ class AsyncRawPipelineClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def create_pipeline_field(
+    async def create_field(
         self,
         pipeline_key: str,
         *,

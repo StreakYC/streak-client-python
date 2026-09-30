@@ -7,24 +7,24 @@ from ..core.request_options import RequestOptions
 from ..types.operation_response import OperationResponse
 from ..types.pipeline_stage import PipelineStage
 from ..types.pipeline_stage_color import PipelineStageColor
-from .raw_client import AsyncRawPipelineStageClient, RawPipelineStageClient
+from .raw_client import AsyncRawPipelineStagesClient, RawPipelineStagesClient
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
 
-class PipelineStageClient:
+class PipelineStagesClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
-        self._raw_client = RawPipelineStageClient(client_wrapper=client_wrapper)
+        self._raw_client = RawPipelineStagesClient(client_wrapper=client_wrapper)
 
     @property
-    def with_raw_response(self) -> RawPipelineStageClient:
+    def with_raw_response(self) -> RawPipelineStagesClient:
         """
         Retrieves a raw implementation of this client that returns raw responses.
 
         Returns
         -------
-        RawPipelineStageClient
+        RawPipelineStagesClient
         """
         return self._raw_client
 
@@ -53,7 +53,7 @@ class PipelineStageClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.pipeline_stage.list_stages(
+        client.pipeline_stages.list_stages(
             pipeline_key="pipelineKey",
         )
         """
@@ -96,7 +96,7 @@ class PipelineStageClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.pipeline_stage.create_stage(
+        client.pipeline_stages.create_stage(
             pipeline_key="pipelineKey",
             name="name",
         )
@@ -131,7 +131,7 @@ class PipelineStageClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.pipeline_stage.get_stage(
+        client.pipeline_stages.get_stage(
             pipeline_key="pipelineKey",
             stage_key="stageKey",
         )
@@ -178,7 +178,7 @@ class PipelineStageClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.pipeline_stage.update_stage(
+        client.pipeline_stages.update_stage(
             pipeline_key="pipelineKey",
             stage_key="stageKey",
         )
@@ -215,7 +215,7 @@ class PipelineStageClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.pipeline_stage.delete_stage(
+        client.pipeline_stages.delete_stage(
             pipeline_key="pipelineKey",
             stage_key="stageKey",
         )
@@ -224,18 +224,18 @@ class PipelineStageClient:
         return _response.data
 
 
-class AsyncPipelineStageClient:
+class AsyncPipelineStagesClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
-        self._raw_client = AsyncRawPipelineStageClient(client_wrapper=client_wrapper)
+        self._raw_client = AsyncRawPipelineStagesClient(client_wrapper=client_wrapper)
 
     @property
-    def with_raw_response(self) -> AsyncRawPipelineStageClient:
+    def with_raw_response(self) -> AsyncRawPipelineStagesClient:
         """
         Retrieves a raw implementation of this client that returns raw responses.
 
         Returns
         -------
-        AsyncRawPipelineStageClient
+        AsyncRawPipelineStagesClient
         """
         return self._raw_client
 
@@ -269,7 +269,7 @@ class AsyncPipelineStageClient:
 
 
         async def main() -> None:
-            await client.pipeline_stage.list_stages(
+            await client.pipeline_stages.list_stages(
                 pipeline_key="pipelineKey",
             )
 
@@ -320,7 +320,7 @@ class AsyncPipelineStageClient:
 
 
         async def main() -> None:
-            await client.pipeline_stage.create_stage(
+            await client.pipeline_stages.create_stage(
                 pipeline_key="pipelineKey",
                 name="name",
             )
@@ -365,7 +365,7 @@ class AsyncPipelineStageClient:
 
 
         async def main() -> None:
-            await client.pipeline_stage.get_stage(
+            await client.pipeline_stages.get_stage(
                 pipeline_key="pipelineKey",
                 stage_key="stageKey",
             )
@@ -420,7 +420,7 @@ class AsyncPipelineStageClient:
 
 
         async def main() -> None:
-            await client.pipeline_stage.update_stage(
+            await client.pipeline_stages.update_stage(
                 pipeline_key="pipelineKey",
                 stage_key="stageKey",
             )
@@ -465,7 +465,7 @@ class AsyncPipelineStageClient:
 
 
         async def main() -> None:
-            await client.pipeline_stage.delete_stage(
+            await client.pipeline_stages.delete_stage(
                 pipeline_key="pipelineKey",
                 stage_key="stageKey",
             )

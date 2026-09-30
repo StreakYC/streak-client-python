@@ -29,7 +29,7 @@ class CommentsClient:
         """
         return self._raw_client
 
-    def list_comments(
+    def get_comments(
         self, box_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> CommentListResponse:
         """
@@ -54,11 +54,11 @@ class CommentsClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.comments.list_comments(
+        client.comments.get_comments(
             box_key="boxKey",
         )
         """
-        _response = self._raw_client.list_comments(box_key, request_options=request_options)
+        _response = self._raw_client.get_comments(box_key, request_options=request_options)
         return _response.data
 
     def create_comment(
@@ -263,7 +263,7 @@ class CommentsClient:
         _response = self._raw_client.react_to_comment(comment_key, emoji=emoji, request_options=request_options)
         return _response.data
 
-    def remove_comment_reaction(
+    def unreact_to_comment(
         self, comment_key: str, *, emoji: str, request_options: typing.Optional[RequestOptions] = None
     ) -> Comment:
         """
@@ -291,12 +291,12 @@ class CommentsClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.comments.remove_comment_reaction(
+        client.comments.unreact_to_comment(
             comment_key="commentKey",
             emoji="emoji",
         )
         """
-        _response = self._raw_client.remove_comment_reaction(comment_key, emoji=emoji, request_options=request_options)
+        _response = self._raw_client.unreact_to_comment(comment_key, emoji=emoji, request_options=request_options)
         return _response.data
 
 
@@ -315,7 +315,7 @@ class AsyncCommentsClient:
         """
         return self._raw_client
 
-    async def list_comments(
+    async def get_comments(
         self, box_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> CommentListResponse:
         """
@@ -345,14 +345,14 @@ class AsyncCommentsClient:
 
 
         async def main() -> None:
-            await client.comments.list_comments(
+            await client.comments.get_comments(
                 box_key="boxKey",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.list_comments(box_key, request_options=request_options)
+        _response = await self._raw_client.get_comments(box_key, request_options=request_options)
         return _response.data
 
     async def create_comment(
@@ -599,7 +599,7 @@ class AsyncCommentsClient:
         _response = await self._raw_client.react_to_comment(comment_key, emoji=emoji, request_options=request_options)
         return _response.data
 
-    async def remove_comment_reaction(
+    async def unreact_to_comment(
         self, comment_key: str, *, emoji: str, request_options: typing.Optional[RequestOptions] = None
     ) -> Comment:
         """
@@ -632,7 +632,7 @@ class AsyncCommentsClient:
 
 
         async def main() -> None:
-            await client.comments.remove_comment_reaction(
+            await client.comments.unreact_to_comment(
                 comment_key="commentKey",
                 emoji="emoji",
             )
@@ -640,7 +640,5 @@ class AsyncCommentsClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.remove_comment_reaction(
-            comment_key, emoji=emoji, request_options=request_options
-        )
+        _response = await self._raw_client.unreact_to_comment(comment_key, emoji=emoji, request_options=request_options)
         return _response.data

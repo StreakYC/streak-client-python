@@ -22,11 +22,11 @@ from pydantic import ValidationError
 OMIT = typing.cast(typing.Any, ...)
 
 
-class RawOrganizationClient:
+class RawOrganizationsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def get_organizations_in_a_batch(
+    def get_organizations(
         self, *, request: typing.Sequence[str], request_options: typing.Optional[RequestOptions] = None
     ) -> HttpResponse[typing.Dict[str, Organization]]:
         """
@@ -70,7 +70,7 @@ class RawOrganizationClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def get_an_organization(
+    def get_organization(
         self, organization_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> HttpResponse[Organization]:
         """
@@ -113,7 +113,7 @@ class RawOrganizationClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def update_an_organization(
+    def update_organization(
         self,
         organization_key: str,
         *,
@@ -248,7 +248,7 @@ class RawOrganizationClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def delete_an_organization(
+    def delete_organization(
         self, organization_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> HttpResponse[OperationResponse]:
         """
@@ -349,7 +349,7 @@ class RawOrganizationClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def create_an_organization(
+    def create_organization(
         self,
         team_key: str,
         *,
@@ -469,11 +469,11 @@ class RawOrganizationClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
 
-class AsyncRawOrganizationClient:
+class AsyncRawOrganizationsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def get_organizations_in_a_batch(
+    async def get_organizations(
         self, *, request: typing.Sequence[str], request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[typing.Dict[str, Organization]]:
         """
@@ -517,7 +517,7 @@ class AsyncRawOrganizationClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def get_an_organization(
+    async def get_organization(
         self, organization_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[Organization]:
         """
@@ -560,7 +560,7 @@ class AsyncRawOrganizationClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def update_an_organization(
+    async def update_organization(
         self,
         organization_key: str,
         *,
@@ -695,7 +695,7 @@ class AsyncRawOrganizationClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def delete_an_organization(
+    async def delete_organization(
         self, organization_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[OperationResponse]:
         """
@@ -796,7 +796,7 @@ class AsyncRawOrganizationClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def create_an_organization(
+    async def create_organization(
         self,
         team_key: str,
         *,

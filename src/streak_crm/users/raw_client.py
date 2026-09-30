@@ -60,9 +60,7 @@ class RawUsersClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def get_user_by_key(
-        self, user_key: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> HttpResponse[User]:
+    def get_user(self, user_key: str, *, request_options: typing.Optional[RequestOptions] = None) -> HttpResponse[User]:
         """
         Returns information about a specific user by their key
 
@@ -102,7 +100,7 @@ class RawUsersClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def update_user_by_key(
+    def update_user(
         self,
         user_key: str,
         *,
@@ -183,7 +181,7 @@ class RawUsersClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def get_all_users_on_team(
+    def get_users_on_team(
         self, team_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> HttpResponse[UserListResponse]:
         """
@@ -270,7 +268,7 @@ class AsyncRawUsersClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def get_user_by_key(
+    async def get_user(
         self, user_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[User]:
         """
@@ -312,7 +310,7 @@ class AsyncRawUsersClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def update_user_by_key(
+    async def update_user(
         self,
         user_key: str,
         *,
@@ -393,7 +391,7 @@ class AsyncRawUsersClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def get_all_users_on_team(
+    async def get_users_on_team(
         self, team_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[UserListResponse]:
         """

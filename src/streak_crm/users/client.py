@@ -53,7 +53,7 @@ class UsersClient:
         _response = self._raw_client.get_current_user(request_options=request_options)
         return _response.data
 
-    def get_user_by_key(self, user_key: str, *, request_options: typing.Optional[RequestOptions] = None) -> User:
+    def get_user(self, user_key: str, *, request_options: typing.Optional[RequestOptions] = None) -> User:
         """
         Returns information about a specific user by their key
 
@@ -76,14 +76,14 @@ class UsersClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.users.get_user_by_key(
+        client.users.get_user(
             user_key="userKey",
         )
         """
-        _response = self._raw_client.get_user_by_key(user_key, request_options=request_options)
+        _response = self._raw_client.get_user(user_key, request_options=request_options)
         return _response.data
 
-    def update_user_by_key(
+    def update_user(
         self,
         user_key: str,
         *,
@@ -135,11 +135,11 @@ class UsersClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.users.update_user_by_key(
+        client.users.update_user(
             user_key="userKey",
         )
         """
-        _response = self._raw_client.update_user_by_key(
+        _response = self._raw_client.update_user(
             user_key,
             timezone_id=timezone_id,
             first_name=first_name,
@@ -151,7 +151,7 @@ class UsersClient:
         )
         return _response.data
 
-    def get_all_users_on_team(
+    def get_users_on_team(
         self, team_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> UserListResponse:
         """
@@ -176,11 +176,11 @@ class UsersClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.users.get_all_users_on_team(
+        client.users.get_users_on_team(
             team_key="teamKey",
         )
         """
-        _response = self._raw_client.get_all_users_on_team(team_key, request_options=request_options)
+        _response = self._raw_client.get_users_on_team(team_key, request_options=request_options)
         return _response.data
 
 
@@ -233,7 +233,7 @@ class AsyncUsersClient:
         _response = await self._raw_client.get_current_user(request_options=request_options)
         return _response.data
 
-    async def get_user_by_key(self, user_key: str, *, request_options: typing.Optional[RequestOptions] = None) -> User:
+    async def get_user(self, user_key: str, *, request_options: typing.Optional[RequestOptions] = None) -> User:
         """
         Returns information about a specific user by their key
 
@@ -261,17 +261,17 @@ class AsyncUsersClient:
 
 
         async def main() -> None:
-            await client.users.get_user_by_key(
+            await client.users.get_user(
                 user_key="userKey",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.get_user_by_key(user_key, request_options=request_options)
+        _response = await self._raw_client.get_user(user_key, request_options=request_options)
         return _response.data
 
-    async def update_user_by_key(
+    async def update_user(
         self,
         user_key: str,
         *,
@@ -328,14 +328,14 @@ class AsyncUsersClient:
 
 
         async def main() -> None:
-            await client.users.update_user_by_key(
+            await client.users.update_user(
                 user_key="userKey",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.update_user_by_key(
+        _response = await self._raw_client.update_user(
             user_key,
             timezone_id=timezone_id,
             first_name=first_name,
@@ -347,7 +347,7 @@ class AsyncUsersClient:
         )
         return _response.data
 
-    async def get_all_users_on_team(
+    async def get_users_on_team(
         self, team_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> UserListResponse:
         """
@@ -377,12 +377,12 @@ class AsyncUsersClient:
 
 
         async def main() -> None:
-            await client.users.get_all_users_on_team(
+            await client.users.get_users_on_team(
                 team_key="teamKey",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.get_all_users_on_team(team_key, request_options=request_options)
+        _response = await self._raw_client.get_users_on_team(team_key, request_options=request_options)
         return _response.data

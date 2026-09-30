@@ -24,7 +24,7 @@ class ApiKeysClient:
         """
         return self._raw_client
 
-    def list_api_keys(
+    def get_api_keys(
         self,
         *,
         limit: typing.Optional[int] = None,
@@ -57,9 +57,9 @@ class ApiKeysClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.api_keys.list_api_keys()
+        client.api_keys.get_api_keys()
         """
-        _response = self._raw_client.list_api_keys(limit=limit, page=page, request_options=request_options)
+        _response = self._raw_client.get_api_keys(limit=limit, page=page, request_options=request_options)
         return _response.data
 
     def create_api_key(
@@ -140,7 +140,7 @@ class AsyncApiKeysClient:
         """
         return self._raw_client
 
-    async def list_api_keys(
+    async def get_api_keys(
         self,
         *,
         limit: typing.Optional[int] = None,
@@ -178,12 +178,12 @@ class AsyncApiKeysClient:
 
 
         async def main() -> None:
-            await client.api_keys.list_api_keys()
+            await client.api_keys.get_api_keys()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.list_api_keys(limit=limit, page=page, request_options=request_options)
+        _response = await self._raw_client.get_api_keys(limit=limit, page=page, request_options=request_options)
         return _response.data
 
     async def create_api_key(

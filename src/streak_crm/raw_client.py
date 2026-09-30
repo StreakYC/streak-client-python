@@ -3,21 +3,21 @@
 import typing
 from json.decoder import JSONDecodeError
 
-from ..core.api_error import ApiError
-from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from ..core.http_response import AsyncHttpResponse, HttpResponse
-from ..core.parse_error import ParsingError
-from ..core.pydantic_utilities import parse_obj_as
-from ..core.request_options import RequestOptions
-from ..types.search_response import SearchResponse
+from .core.api_error import ApiError
+from .core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from .core.http_response import AsyncHttpResponse, HttpResponse
+from .core.parse_error import ParsingError
+from .core.pydantic_utilities import parse_obj_as
+from .core.request_options import RequestOptions
+from .types.search_response import SearchResponse
 from pydantic import ValidationError
 
 
-class RawSearchClient:
+class RawStreak:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def search_boxes_contacts_and_organizations(
+    def search(
         self,
         *,
         name: typing.Optional[str] = None,
@@ -92,11 +92,11 @@ class RawSearchClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
 
-class AsyncRawSearchClient:
+class AsyncRawStreak:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def search_boxes_contacts_and_organizations(
+    async def search(
         self,
         *,
         name: typing.Optional[str] = None,

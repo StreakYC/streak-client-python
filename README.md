@@ -40,7 +40,7 @@ client = Streak(
     token="<token>",
 )
 
-client.pipeline.update_pipeline_field(
+client.pipelines.update_field(
     pipeline_key="pipelineKey",
     field_key="fieldKey",
 )
@@ -61,7 +61,7 @@ client = AsyncStreak(
 
 
 async def main() -> None:
-    await client.pipeline.update_pipeline_field(
+    await client.pipelines.update_field(
         pipeline_key="pipelineKey",
         field_key="fieldKey",
     )
@@ -79,7 +79,7 @@ will be thrown.
 from streak_crm.core.api_error import ApiError
 
 try:
-    client.pipeline.update_pipeline_field(...)
+    client.pipelines.update_field(...)
 except ApiError as e:
     print(e.status_code)
     print(e.body)
@@ -96,7 +96,7 @@ The `.with_raw_response` property returns a "raw" client that can be used to acc
 from streak_crm import Streak
 
 client = Streak(...)
-response = client.pipeline.with_raw_response.update_pipeline_field(...)
+response = client.pipelines.with_raw_response.update_field(...)
 print(response.headers)  # access the response headers
 print(response.status_code)  # access the response status code
 print(response.data)  # access the underlying object
@@ -127,7 +127,7 @@ Which status codes are retried depends on the `retryStatusCodes` generator confi
 Use the `max_retries` request option to configure this behavior.
 
 ```python
-client.pipeline.update_pipeline_field(..., request_options={
+client.pipelines.update_field(..., request_options={
     "max_retries": 1
 })
 ```
@@ -142,7 +142,7 @@ from streak_crm import Streak
 client = Streak(..., timeout=20.0)
 
 # Override timeout for a specific method
-client.pipeline.update_pipeline_field(..., request_options={
+client.pipelines.update_field(..., request_options={
     "timeout": 1
 })
 ```

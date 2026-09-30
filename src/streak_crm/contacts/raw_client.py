@@ -23,11 +23,11 @@ from pydantic import ValidationError
 OMIT = typing.cast(typing.Any, ...)
 
 
-class RawContactClient:
+class RawContactsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def get_contacts_in_bulk(
+    def get_contacts(
         self, *, request: typing.Sequence[str], request_options: typing.Optional[RequestOptions] = None
     ) -> HttpResponse[ContactKeyBatch]:
         """
@@ -485,11 +485,11 @@ class RawContactClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
 
-class AsyncRawContactClient:
+class AsyncRawContactsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def get_contacts_in_bulk(
+    async def get_contacts(
         self, *, request: typing.Sequence[str], request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[ContactKeyBatch]:
         """

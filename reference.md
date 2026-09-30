@@ -1,6 +1,117 @@
 # Reference
-## ApiKeys
-<details><summary><code>client.api_keys.<a href="src/streak_crm/api_keys/client.py">list_api_keys</a>(...) -> typing.List[ApiKey]</code></summary>
+<details><summary><code>client.<a href="src/streak_crm/client.py">search</a>(...) -> SearchResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Searches visible boxes, contacts, and organizations by query, or visible boxes by exact name. Exactly one of query or name must be provided.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from streak_crm import Streak
+from streak_crm.environment import StreakEnvironment
+
+client = Streak(
+    token="<token>",
+    environment=StreakEnvironment.DEFAULT,
+)
+
+client.search()
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**name:** `typing.Optional[str]` — Exact box name to search for.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**page:** `typing.Optional[int]` — Zero-based page number.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pipeline_key:** `typing.Optional[typing.List[str]]` — Pipeline keys to constrain the search to.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**query:** `typing.Optional[str]` — Full-text query to search across boxes, contacts, and organizations.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**stage_key:** `typing.Optional[typing.List[str]]` — Stage keys to constrain the search to.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**team_key:** `typing.Optional[typing.List[str]]` — Team keys to constrain the search to.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## API Keys
+<details><summary><code>client.api_keys.<a href="src/streak_crm/api_keys/client.py">get_api_keys</a>(...) -> typing.List[ApiKey]</code></summary>
 <dl>
 <dd>
 
@@ -35,7 +146,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.api_keys.list_api_keys()
+client.api_keys.get_api_keys()
 
 ```
 </dd>
@@ -305,8 +416,8 @@ client.boxes.get_box_markdown(
 </dl>
 </details>
 
-## Pipeline
-<details><summary><code>client.pipeline.<a href="src/streak_crm/pipeline/client.py">list_pipeline_fields</a>(...) -> typing.List[PipelineField]</code></summary>
+## Pipelines
+<details><summary><code>client.pipelines.<a href="src/streak_crm/pipelines/client.py">list_fields</a>(...) -> typing.List[PipelineField]</code></summary>
 <dl>
 <dd>
 
@@ -341,7 +452,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.pipeline.list_pipeline_fields(
+client.pipelines.list_fields(
     pipeline_key="pipelineKey",
 )
 
@@ -379,7 +490,7 @@ client.pipeline.list_pipeline_fields(
 </dl>
 </details>
 
-<details><summary><code>client.pipeline.<a href="src/streak_crm/pipeline/client.py">get_pipeline_field</a>(...) -> PipelineField</code></summary>
+<details><summary><code>client.pipelines.<a href="src/streak_crm/pipelines/client.py">get_field</a>(...) -> PipelineField</code></summary>
 <dl>
 <dd>
 
@@ -414,7 +525,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.pipeline.get_pipeline_field(
+client.pipelines.get_field(
     pipeline_key="pipelineKey",
     field_key="fieldKey",
 )
@@ -461,7 +572,7 @@ client.pipeline.get_pipeline_field(
 </dl>
 </details>
 
-<details><summary><code>client.pipeline.<a href="src/streak_crm/pipeline/client.py">update_pipeline_field</a>(...) -> PipelineField</code></summary>
+<details><summary><code>client.pipelines.<a href="src/streak_crm/pipelines/client.py">update_field</a>(...) -> PipelineField</code></summary>
 <dl>
 <dd>
 
@@ -496,7 +607,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.pipeline.update_pipeline_field(
+client.pipelines.update_field(
     pipeline_key="pipelineKey",
     field_key="fieldKey",
 )
@@ -591,7 +702,7 @@ client.pipeline.update_pipeline_field(
 </dl>
 </details>
 
-<details><summary><code>client.pipeline.<a href="src/streak_crm/pipeline/client.py">delete_pipeline_field</a>(...) -> OperationResponse</code></summary>
+<details><summary><code>client.pipelines.<a href="src/streak_crm/pipelines/client.py">delete_field</a>(...) -> OperationResponse</code></summary>
 <dl>
 <dd>
 
@@ -626,7 +737,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.pipeline.delete_pipeline_field(
+client.pipelines.delete_field(
     pipeline_key="pipelineKey",
     field_key="fieldKey",
 )
@@ -673,7 +784,7 @@ client.pipeline.delete_pipeline_field(
 </dl>
 </details>
 
-<details><summary><code>client.pipeline.<a href="src/streak_crm/pipeline/client.py">list_pipelines</a>(...) -> PipelineListResponse</code></summary>
+<details><summary><code>client.pipelines.<a href="src/streak_crm/pipelines/client.py">list_pipelines</a>(...) -> PipelineListResponse</code></summary>
 <dl>
 <dd>
 
@@ -708,7 +819,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.pipeline.list_pipelines()
+client.pipelines.list_pipelines()
 
 ```
 </dd>
@@ -760,7 +871,7 @@ client.pipeline.list_pipelines()
 </dl>
 </details>
 
-<details><summary><code>client.pipeline.<a href="src/streak_crm/pipeline/client.py">create_pipeline</a>(...)</code></summary>
+<details><summary><code>client.pipelines.<a href="src/streak_crm/pipelines/client.py">create_pipeline</a>(...) -> Pipeline</code></summary>
 <dl>
 <dd>
 
@@ -795,7 +906,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.pipeline.create_pipeline(
+client.pipelines.create_pipeline(
     name="name",
     team_key="teamKey",
     stages=[
@@ -901,7 +1012,7 @@ client.pipeline.create_pipeline(
 </dl>
 </details>
 
-<details><summary><code>client.pipeline.<a href="src/streak_crm/pipeline/client.py">get_pipeline</a>(...) -> Pipeline</code></summary>
+<details><summary><code>client.pipelines.<a href="src/streak_crm/pipelines/client.py">get_pipeline</a>(...) -> Pipeline</code></summary>
 <dl>
 <dd>
 
@@ -936,7 +1047,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.pipeline.get_pipeline(
+client.pipelines.get_pipeline(
     pipeline_key="pipelineKey",
 )
 
@@ -974,7 +1085,7 @@ client.pipeline.get_pipeline(
 </dl>
 </details>
 
-<details><summary><code>client.pipeline.<a href="src/streak_crm/pipeline/client.py">update_pipeline</a>(...) -> Pipeline</code></summary>
+<details><summary><code>client.pipelines.<a href="src/streak_crm/pipelines/client.py">update_pipeline</a>(...) -> Pipeline</code></summary>
 <dl>
 <dd>
 
@@ -1009,7 +1120,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.pipeline.update_pipeline(
+client.pipelines.update_pipeline(
     pipeline_key="pipelineKey",
 )
 
@@ -1127,7 +1238,7 @@ client.pipeline.update_pipeline(
 </dl>
 </details>
 
-<details><summary><code>client.pipeline.<a href="src/streak_crm/pipeline/client.py">delete_pipeline</a>(...) -> OperationResponse</code></summary>
+<details><summary><code>client.pipelines.<a href="src/streak_crm/pipelines/client.py">delete_pipeline</a>(...) -> OperationResponse</code></summary>
 <dl>
 <dd>
 
@@ -1162,7 +1273,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.pipeline.delete_pipeline(
+client.pipelines.delete_pipeline(
     pipeline_key="pipelineKey",
 )
 
@@ -1200,7 +1311,7 @@ client.pipeline.delete_pipeline(
 </dl>
 </details>
 
-<details><summary><code>client.pipeline.<a href="src/streak_crm/pipeline/client.py">create_pipeline_field</a>(...) -> PipelineField</code></summary>
+<details><summary><code>client.pipelines.<a href="src/streak_crm/pipelines/client.py">create_field</a>(...) -> PipelineField</code></summary>
 <dl>
 <dd>
 
@@ -1235,7 +1346,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.pipeline.create_pipeline_field(
+client.pipelines.create_field(
     pipeline_key="pipelineKey",
     name="name",
     type="TEXT_INPUT",
@@ -1264,118 +1375,6 @@ client.pipeline.create_pipeline_field(
 <dd>
 
 **request:** `PipelineFieldCreate` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Search
-<details><summary><code>client.search.<a href="src/streak_crm/search/client.py">search_boxes_contacts_and_organizations</a>(...) -> SearchResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Searches visible boxes, contacts, and organizations by query, or visible boxes by exact name. Exactly one of query or name must be provided.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from streak_crm import Streak
-from streak_crm.environment import StreakEnvironment
-
-client = Streak(
-    token="<token>",
-    environment=StreakEnvironment.DEFAULT,
-)
-
-client.search.search_boxes_contacts_and_organizations()
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**name:** `typing.Optional[str]` — Exact box name to search for.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**page:** `typing.Optional[int]` — Zero-based page number.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**pipeline_key:** `typing.Optional[typing.List[str]]` — Pipeline keys to constrain the search to.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**query:** `typing.Optional[str]` — Full-text query to search across boxes, contacts, and organizations.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**stage_key:** `typing.Optional[typing.List[str]]` — Stage keys to constrain the search to.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**team_key:** `typing.Optional[typing.List[str]]` — Team keys to constrain the search to.
     
 </dd>
 </dl>
@@ -1459,7 +1458,7 @@ client.users.get_current_user()
 </dl>
 </details>
 
-<details><summary><code>client.users.<a href="src/streak_crm/users/client.py">get_user_by_key</a>(...) -> User</code></summary>
+<details><summary><code>client.users.<a href="src/streak_crm/users/client.py">get_user</a>(...) -> User</code></summary>
 <dl>
 <dd>
 
@@ -1494,7 +1493,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.users.get_user_by_key(
+client.users.get_user(
     user_key="userKey",
 )
 
@@ -1532,7 +1531,7 @@ client.users.get_user_by_key(
 </dl>
 </details>
 
-<details><summary><code>client.users.<a href="src/streak_crm/users/client.py">update_user_by_key</a>(...) -> User</code></summary>
+<details><summary><code>client.users.<a href="src/streak_crm/users/client.py">update_user</a>(...) -> User</code></summary>
 <dl>
 <dd>
 
@@ -1567,7 +1566,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.users.update_user_by_key(
+client.users.update_user(
     user_key="userKey",
 )
 
@@ -1653,7 +1652,7 @@ client.users.update_user_by_key(
 </dl>
 </details>
 
-<details><summary><code>client.users.<a href="src/streak_crm/users/client.py">get_all_users_on_team</a>(...) -> UserListResponse</code></summary>
+<details><summary><code>client.users.<a href="src/streak_crm/users/client.py">get_users_on_team</a>(...) -> UserListResponse</code></summary>
 <dl>
 <dd>
 
@@ -1688,7 +1687,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.users.get_all_users_on_team(
+client.users.get_users_on_team(
     team_key="teamKey",
 )
 
@@ -1727,7 +1726,7 @@ client.users.get_all_users_on_team(
 </details>
 
 ## Comments
-<details><summary><code>client.comments.<a href="src/streak_crm/comments/client.py">list_comments</a>(...) -> CommentListResponse</code></summary>
+<details><summary><code>client.comments.<a href="src/streak_crm/comments/client.py">get_comments</a>(...) -> CommentListResponse</code></summary>
 <dl>
 <dd>
 
@@ -1762,7 +1761,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.comments.list_comments(
+client.comments.get_comments(
     box_key="boxKey",
 )
 
@@ -2223,7 +2222,7 @@ client.comments.react_to_comment(
 </dl>
 </details>
 
-<details><summary><code>client.comments.<a href="src/streak_crm/comments/client.py">remove_comment_reaction</a>(...) -> Comment</code></summary>
+<details><summary><code>client.comments.<a href="src/streak_crm/comments/client.py">unreact_to_comment</a>(...) -> Comment</code></summary>
 <dl>
 <dd>
 
@@ -2258,7 +2257,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.comments.remove_comment_reaction(
+client.comments.unreact_to_comment(
     comment_key="commentKey",
     emoji="emoji",
 )
@@ -2306,7 +2305,7 @@ client.comments.remove_comment_reaction(
 </details>
 
 ## Meetings
-<details><summary><code>client.meetings.<a href="src/streak_crm/meetings/client.py">list_meetings</a>(...) -> MeetingListResponse</code></summary>
+<details><summary><code>client.meetings.<a href="src/streak_crm/meetings/client.py">get_meetings</a>(...) -> MeetingListResponse</code></summary>
 <dl>
 <dd>
 
@@ -2341,7 +2340,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.meetings.list_meetings(
+client.meetings.get_meetings(
     box_key="boxKey",
 )
 
@@ -2786,7 +2785,7 @@ client.meetings.delete_meeting(
 </details>
 
 ## Tasks
-<details><summary><code>client.tasks.<a href="src/streak_crm/tasks/client.py">list_box_tasks</a>(...) -> TaskListResponse</code></summary>
+<details><summary><code>client.tasks.<a href="src/streak_crm/tasks/client.py">get_tasks_for_box</a>(...) -> TaskListResponse</code></summary>
 <dl>
 <dd>
 
@@ -2821,7 +2820,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.tasks.list_box_tasks(
+client.tasks.get_tasks_for_box(
     box_key="boxKey",
 )
 
@@ -3005,7 +3004,7 @@ client.tasks.create_task(
 </dl>
 </details>
 
-<details><summary><code>client.tasks.<a href="src/streak_crm/tasks/client.py">list_upcoming_tasks</a>(...) -> TaskListResponse</code></summary>
+<details><summary><code>client.tasks.<a href="src/streak_crm/tasks/client.py">get_assigned_tasks</a>(...) -> TaskListResponse</code></summary>
 <dl>
 <dd>
 
@@ -3040,7 +3039,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.tasks.list_upcoming_tasks()
+client.tasks.get_assigned_tasks()
 
 ```
 </dd>
@@ -3391,8 +3390,8 @@ client.tasks.delete_task(
 </dl>
 </details>
 
-## Contact
-<details><summary><code>client.contact.<a href="src/streak_crm/contact/client.py">get_contacts_in_bulk</a>(...) -> ContactKeyBatch</code></summary>
+## Contacts
+<details><summary><code>client.contacts.<a href="src/streak_crm/contacts/client.py">get_contacts</a>(...) -> ContactKeyBatch</code></summary>
 <dl>
 <dd>
 
@@ -3427,7 +3426,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.contact.get_contacts_in_bulk(
+client.contacts.get_contacts(
     request=[
         "string"
     ],
@@ -3467,7 +3466,7 @@ client.contact.get_contacts_in_bulk(
 </dl>
 </details>
 
-<details><summary><code>client.contact.<a href="src/streak_crm/contact/client.py">get_contact</a>(...) -> Contact</code></summary>
+<details><summary><code>client.contacts.<a href="src/streak_crm/contacts/client.py">get_contact</a>(...) -> Contact</code></summary>
 <dl>
 <dd>
 
@@ -3502,7 +3501,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.contact.get_contact(
+client.contacts.get_contact(
     contact_key="contactKey",
 )
 
@@ -3540,7 +3539,7 @@ client.contact.get_contact(
 </dl>
 </details>
 
-<details><summary><code>client.contact.<a href="src/streak_crm/contact/client.py">update_contact</a>(...) -> Contact</code></summary>
+<details><summary><code>client.contacts.<a href="src/streak_crm/contacts/client.py">update_contact</a>(...) -> Contact</code></summary>
 <dl>
 <dd>
 
@@ -3575,7 +3574,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.contact.update_contact(
+client.contacts.update_contact(
     contact_key="contactKey",
 )
 
@@ -3741,7 +3740,7 @@ client.contact.update_contact(
 </dl>
 </details>
 
-<details><summary><code>client.contact.<a href="src/streak_crm/contact/client.py">delete_contact</a>(...) -> OperationResponse</code></summary>
+<details><summary><code>client.contacts.<a href="src/streak_crm/contacts/client.py">delete_contact</a>(...) -> OperationResponse</code></summary>
 <dl>
 <dd>
 
@@ -3776,7 +3775,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.contact.delete_contact(
+client.contacts.delete_contact(
     contact_key="contactKey",
 )
 
@@ -3814,7 +3813,7 @@ client.contact.delete_contact(
 </dl>
 </details>
 
-<details><summary><code>client.contact.<a href="src/streak_crm/contact/client.py">list_contacts</a>(...) -> ContactPage</code></summary>
+<details><summary><code>client.contacts.<a href="src/streak_crm/contacts/client.py">list_contacts</a>(...) -> ContactPage</code></summary>
 <dl>
 <dd>
 
@@ -3849,7 +3848,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.contact.list_contacts(
+client.contacts.list_contacts(
     team_key="teamKey",
     after=1646870400,
 )
@@ -3912,7 +3911,7 @@ client.contact.list_contacts(
 </dl>
 </details>
 
-<details><summary><code>client.contact.<a href="src/streak_crm/contact/client.py">create_contact</a>(...) -> Contact</code></summary>
+<details><summary><code>client.contacts.<a href="src/streak_crm/contacts/client.py">create_contact</a>(...) -> Contact</code></summary>
 <dl>
 <dd>
 
@@ -3947,7 +3946,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.contact.create_contact(
+client.contacts.create_contact(
     team_key="teamKey",
 )
 
@@ -4097,8 +4096,8 @@ client.contact.create_contact(
 </dl>
 </details>
 
-## Organization
-<details><summary><code>client.organization.<a href="src/streak_crm/organization/client.py">get_organizations_in_a_batch</a>(...) -> typing.Dict[str, Organization]</code></summary>
+## Organizations
+<details><summary><code>client.organizations.<a href="src/streak_crm/organizations/client.py">get_organizations</a>(...) -> typing.Dict[str, Organization]</code></summary>
 <dl>
 <dd>
 
@@ -4133,7 +4132,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.organization.get_organizations_in_a_batch(
+client.organizations.get_organizations(
     request=[
         "string"
     ],
@@ -4173,7 +4172,7 @@ client.organization.get_organizations_in_a_batch(
 </dl>
 </details>
 
-<details><summary><code>client.organization.<a href="src/streak_crm/organization/client.py">get_an_organization</a>(...) -> Organization</code></summary>
+<details><summary><code>client.organizations.<a href="src/streak_crm/organizations/client.py">get_organization</a>(...) -> Organization</code></summary>
 <dl>
 <dd>
 
@@ -4208,7 +4207,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.organization.get_an_organization(
+client.organizations.get_organization(
     organization_key="organizationKey",
 )
 
@@ -4246,7 +4245,7 @@ client.organization.get_an_organization(
 </dl>
 </details>
 
-<details><summary><code>client.organization.<a href="src/streak_crm/organization/client.py">update_an_organization</a>(...) -> Organization</code></summary>
+<details><summary><code>client.organizations.<a href="src/streak_crm/organizations/client.py">update_organization</a>(...) -> Organization</code></summary>
 <dl>
 <dd>
 
@@ -4281,7 +4280,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.organization.update_an_organization(
+client.organizations.update_organization(
     organization_key="organizationKey",
 )
 
@@ -4439,7 +4438,7 @@ client.organization.update_an_organization(
 </dl>
 </details>
 
-<details><summary><code>client.organization.<a href="src/streak_crm/organization/client.py">delete_an_organization</a>(...) -> OperationResponse</code></summary>
+<details><summary><code>client.organizations.<a href="src/streak_crm/organizations/client.py">delete_organization</a>(...) -> OperationResponse</code></summary>
 <dl>
 <dd>
 
@@ -4474,7 +4473,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.organization.delete_an_organization(
+client.organizations.delete_organization(
     organization_key="organizationKey",
 )
 
@@ -4512,7 +4511,7 @@ client.organization.delete_an_organization(
 </dl>
 </details>
 
-<details><summary><code>client.organization.<a href="src/streak_crm/organization/client.py">list_organizations</a>(...) -> OrganizationPage</code></summary>
+<details><summary><code>client.organizations.<a href="src/streak_crm/organizations/client.py">list_organizations</a>(...) -> OrganizationPage</code></summary>
 <dl>
 <dd>
 
@@ -4547,7 +4546,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.organization.list_organizations(
+client.organizations.list_organizations(
     team_key="teamKey",
 )
 
@@ -4601,7 +4600,7 @@ client.organization.list_organizations(
 </dl>
 </details>
 
-<details><summary><code>client.organization.<a href="src/streak_crm/organization/client.py">create_an_organization</a>(...) -> Organization</code></summary>
+<details><summary><code>client.organizations.<a href="src/streak_crm/organizations/client.py">create_organization</a>(...) -> Organization</code></summary>
 <dl>
 <dd>
 
@@ -4636,7 +4635,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.organization.create_an_organization(
+client.organizations.create_organization(
     team_key="teamKey",
 )
 
@@ -4778,8 +4777,8 @@ client.organization.create_an_organization(
 </dl>
 </details>
 
-## PipelineStage
-<details><summary><code>client.pipeline_stage.<a href="src/streak_crm/pipeline_stage/client.py">list_stages</a>(...) -> typing.Dict[str, PipelineStage]</code></summary>
+## Pipeline Stages
+<details><summary><code>client.pipeline_stages.<a href="src/streak_crm/pipeline_stages/client.py">list_stages</a>(...) -> typing.Dict[str, PipelineStage]</code></summary>
 <dl>
 <dd>
 
@@ -4814,7 +4813,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.pipeline_stage.list_stages(
+client.pipeline_stages.list_stages(
     pipeline_key="pipelineKey",
 )
 
@@ -4852,7 +4851,7 @@ client.pipeline_stage.list_stages(
 </dl>
 </details>
 
-<details><summary><code>client.pipeline_stage.<a href="src/streak_crm/pipeline_stage/client.py">create_stage</a>(...) -> PipelineStage</code></summary>
+<details><summary><code>client.pipeline_stages.<a href="src/streak_crm/pipeline_stages/client.py">create_stage</a>(...) -> PipelineStage</code></summary>
 <dl>
 <dd>
 
@@ -4887,7 +4886,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.pipeline_stage.create_stage(
+client.pipeline_stages.create_stage(
     pipeline_key="pipelineKey",
     name="name",
 )
@@ -4942,7 +4941,7 @@ client.pipeline_stage.create_stage(
 </dl>
 </details>
 
-<details><summary><code>client.pipeline_stage.<a href="src/streak_crm/pipeline_stage/client.py">get_stage</a>(...) -> PipelineStage</code></summary>
+<details><summary><code>client.pipeline_stages.<a href="src/streak_crm/pipeline_stages/client.py">get_stage</a>(...) -> PipelineStage</code></summary>
 <dl>
 <dd>
 
@@ -4977,7 +4976,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.pipeline_stage.get_stage(
+client.pipeline_stages.get_stage(
     pipeline_key="pipelineKey",
     stage_key="stageKey",
 )
@@ -5024,7 +5023,7 @@ client.pipeline_stage.get_stage(
 </dl>
 </details>
 
-<details><summary><code>client.pipeline_stage.<a href="src/streak_crm/pipeline_stage/client.py">update_stage</a>(...) -> PipelineStage</code></summary>
+<details><summary><code>client.pipeline_stages.<a href="src/streak_crm/pipeline_stages/client.py">update_stage</a>(...) -> PipelineStage</code></summary>
 <dl>
 <dd>
 
@@ -5059,7 +5058,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.pipeline_stage.update_stage(
+client.pipeline_stages.update_stage(
     pipeline_key="pipelineKey",
     stage_key="stageKey",
 )
@@ -5122,7 +5121,7 @@ client.pipeline_stage.update_stage(
 </dl>
 </details>
 
-<details><summary><code>client.pipeline_stage.<a href="src/streak_crm/pipeline_stage/client.py">delete_stage</a>(...) -> OperationResponse</code></summary>
+<details><summary><code>client.pipeline_stages.<a href="src/streak_crm/pipeline_stages/client.py">delete_stage</a>(...) -> OperationResponse</code></summary>
 <dl>
 <dd>
 
@@ -5157,7 +5156,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.pipeline_stage.delete_stage(
+client.pipeline_stages.delete_stage(
     pipeline_key="pipelineKey",
     stage_key="stageKey",
 )
@@ -5204,8 +5203,8 @@ client.pipeline_stage.delete_stage(
 </dl>
 </details>
 
-## Team
-<details><summary><code>client.team.<a href="src/streak_crm/team/client.py">create_team</a>(...) -> Team</code></summary>
+## Teams
+<details><summary><code>client.teams.<a href="src/streak_crm/teams/client.py">create_team</a>(...) -> Team</code></summary>
 <dl>
 <dd>
 
@@ -5240,7 +5239,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.team.create_team(
+client.teams.create_team(
     name="name",
     members=[
         TeamMemberCreate()
@@ -5289,7 +5288,7 @@ client.team.create_team(
 </dl>
 </details>
 
-<details><summary><code>client.team.<a href="src/streak_crm/team/client.py">get_team</a>(...) -> Team</code></summary>
+<details><summary><code>client.teams.<a href="src/streak_crm/teams/client.py">get_team</a>(...) -> Team</code></summary>
 <dl>
 <dd>
 
@@ -5324,7 +5323,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.team.get_team(
+client.teams.get_team(
     team_key="teamKey",
 )
 
@@ -5362,7 +5361,7 @@ client.team.get_team(
 </dl>
 </details>
 
-<details><summary><code>client.team.<a href="src/streak_crm/team/client.py">update_team</a>(...) -> Team</code></summary>
+<details><summary><code>client.teams.<a href="src/streak_crm/teams/client.py">update_team</a>(...) -> Team</code></summary>
 <dl>
 <dd>
 
@@ -5397,7 +5396,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.team.update_team(
+client.teams.update_team(
     team_key="teamKey",
 )
 
@@ -5507,7 +5506,7 @@ client.team.update_team(
 </dl>
 </details>
 
-<details><summary><code>client.team.<a href="src/streak_crm/team/client.py">list_current_users_teams</a>(...) -> TeamListResponse</code></summary>
+<details><summary><code>client.teams.<a href="src/streak_crm/teams/client.py">get_current_user_teams</a>(...) -> TeamListResponse</code></summary>
 <dl>
 <dd>
 
@@ -5542,7 +5541,7 @@ client = Streak(
     environment=StreakEnvironment.DEFAULT,
 )
 
-client.team.list_current_users_teams()
+client.teams.get_current_user_teams()
 
 ```
 </dd>

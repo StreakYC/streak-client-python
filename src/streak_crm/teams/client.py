@@ -10,24 +10,24 @@ from ..types.team_field_settings_update import TeamFieldSettingsUpdate
 from ..types.team_list_response import TeamListResponse
 from ..types.team_member_create import TeamMemberCreate
 from ..types.team_member_update import TeamMemberUpdate
-from .raw_client import AsyncRawTeamClient, RawTeamClient
+from .raw_client import AsyncRawTeamsClient, RawTeamsClient
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
 
-class TeamClient:
+class TeamsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
-        self._raw_client = RawTeamClient(client_wrapper=client_wrapper)
+        self._raw_client = RawTeamsClient(client_wrapper=client_wrapper)
 
     @property
-    def with_raw_response(self) -> RawTeamClient:
+    def with_raw_response(self) -> RawTeamsClient:
         """
         Retrieves a raw implementation of this client that returns raw responses.
 
         Returns
         -------
-        RawTeamClient
+        RawTeamsClient
         """
         return self._raw_client
 
@@ -64,7 +64,7 @@ class TeamClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.team.create_team(
+        client.teams.create_team(
             name="name",
             members=[TeamMemberCreate()],
         )
@@ -96,7 +96,7 @@ class TeamClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.team.get_team(
+        client.teams.get_team(
             team_key="teamKey",
         )
         """
@@ -170,7 +170,7 @@ class TeamClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.team.update_team(
+        client.teams.update_team(
             team_key="teamKey",
         )
         """
@@ -189,7 +189,7 @@ class TeamClient:
         )
         return _response.data
 
-    def list_current_users_teams(
+    def get_current_user_teams(
         self,
         *,
         limit: typing.Optional[int] = None,
@@ -222,24 +222,24 @@ class TeamClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.team.list_current_users_teams()
+        client.teams.get_current_user_teams()
         """
-        _response = self._raw_client.list_current_users_teams(limit=limit, page=page, request_options=request_options)
+        _response = self._raw_client.get_current_user_teams(limit=limit, page=page, request_options=request_options)
         return _response.data
 
 
-class AsyncTeamClient:
+class AsyncTeamsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
-        self._raw_client = AsyncRawTeamClient(client_wrapper=client_wrapper)
+        self._raw_client = AsyncRawTeamsClient(client_wrapper=client_wrapper)
 
     @property
-    def with_raw_response(self) -> AsyncRawTeamClient:
+    def with_raw_response(self) -> AsyncRawTeamsClient:
         """
         Retrieves a raw implementation of this client that returns raw responses.
 
         Returns
         -------
-        AsyncRawTeamClient
+        AsyncRawTeamsClient
         """
         return self._raw_client
 
@@ -281,7 +281,7 @@ class AsyncTeamClient:
 
 
         async def main() -> None:
-            await client.team.create_team(
+            await client.teams.create_team(
                 name="name",
                 members=[TeamMemberCreate()],
             )
@@ -321,7 +321,7 @@ class AsyncTeamClient:
 
 
         async def main() -> None:
-            await client.team.get_team(
+            await client.teams.get_team(
                 team_key="teamKey",
             )
 
@@ -403,7 +403,7 @@ class AsyncTeamClient:
 
 
         async def main() -> None:
-            await client.team.update_team(
+            await client.teams.update_team(
                 team_key="teamKey",
             )
 
@@ -425,7 +425,7 @@ class AsyncTeamClient:
         )
         return _response.data
 
-    async def list_current_users_teams(
+    async def get_current_user_teams(
         self,
         *,
         limit: typing.Optional[int] = None,
@@ -463,12 +463,12 @@ class AsyncTeamClient:
 
 
         async def main() -> None:
-            await client.team.list_current_users_teams()
+            await client.teams.get_current_user_teams()
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.list_current_users_teams(
+        _response = await self._raw_client.get_current_user_teams(
             limit=limit, page=page, request_options=request_options
         )
         return _response.data

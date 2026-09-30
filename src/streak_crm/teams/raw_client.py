@@ -11,97 +11,55 @@ from ..core.parse_error import ParsingError
 from ..core.pydantic_utilities import parse_obj_as
 from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
-from ..types.operation_response import OperationResponse
-from ..types.pipeline_stage import PipelineStage
-from ..types.pipeline_stage_color import PipelineStageColor
+from ..types.team import Team
+from ..types.team_based_permissions_update import TeamBasedPermissionsUpdate
+from ..types.team_field_settings_update import TeamFieldSettingsUpdate
+from ..types.team_list_response import TeamListResponse
+from ..types.team_member_create import TeamMemberCreate
+from ..types.team_member_update import TeamMemberUpdate
 from pydantic import ValidationError
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
 
-class RawPipelineStageClient:
+class RawTeamsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def list_stages(
-        self, pipeline_key: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> HttpResponse[typing.Dict[str, PipelineStage]]:
-        """
-        Returns the pipeline's stages keyed by stage key.
-
-        Parameters
-        ----------
-        pipeline_key : str
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        HttpResponse[typing.Dict[str, PipelineStage]]
-            OK
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            f"v2/pipelines/{encode_path_param(pipeline_key)}/stages",
-            method="GET",
-            request_options=request_options,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    typing.Dict[str, PipelineStage],
-                    parse_obj_as(
-                        type_=typing.Dict[str, PipelineStage],  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return HttpResponse(response=_response, data=_data)
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
-        except ValidationError as e:
-            raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
-            )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
-
-    def create_stage(
+    def create_team(
         self,
-        pipeline_key: str,
         *,
         name: str,
-        color: typing.Optional[PipelineStageColor] = OMIT,
+        members: typing.Sequence[TeamMemberCreate],
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PipelineStage]:
+    ) -> HttpResponse[Team]:
         """
-        Creates a stage at the end of the pipeline's stage order.
+        Creates a team with an initial member roster.
 
         Parameters
         ----------
-        pipeline_key : str
-
         name : str
-            Nonempty name of the new stage.
+            Display name for the new team.
 
-        color : typing.Optional[PipelineStageColor]
-            Custom stage colors. Omit or set to null to use the pipeline theme.
+        members : typing.Sequence[TeamMemberCreate]
+            Initial team members. The authenticated creator must be included.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PipelineStage]
+        HttpResponse[Team]
             OK
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v2/pipelines/{encode_path_param(pipeline_key)}/stages",
+            "v2/teams",
             method="POST",
             json={
                 "name": name,
-                "color": convert_and_respect_annotation_metadata(
-                    object_=color, annotation=typing.Optional[PipelineStageColor], direction="write"
+                "members": convert_and_respect_annotation_metadata(
+                    object_=members, annotation=typing.Sequence[TeamMemberCreate], direction="write"
                 ),
             },
             headers={
@@ -113,9 +71,9 @@ class RawPipelineStageClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PipelineStage,
+                    Team,
                     parse_obj_as(
-                        type_=PipelineStage,  # type: ignore
+                        type_=Team,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -129,37 +87,34 @@ class RawPipelineStageClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def get_stage(
-        self, pipeline_key: str, stage_key: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> HttpResponse[PipelineStage]:
+    def get_team(self, team_key: str, *, request_options: typing.Optional[RequestOptions] = None) -> HttpResponse[Team]:
         """
-        Returns a stage in a pipeline.
+        Returns a team by key.
 
         Parameters
         ----------
-        pipeline_key : str
-
-        stage_key : str
+        team_key : str
+            Key for the team to return.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PipelineStage]
+        HttpResponse[Team]
             OK
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v2/pipelines/{encode_path_param(pipeline_key)}/stages/{encode_path_param(stage_key)}",
+            f"v2/teams/{encode_path_param(team_key)}",
             method="GET",
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PipelineStage,
+                    Team,
                     parse_obj_as(
-                        type_=PipelineStage,  # type: ignore
+                        type_=Team,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -173,45 +128,90 @@ class RawPipelineStageClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def update_stage(
+    def update_team(
         self,
-        pipeline_key: str,
-        stage_key: str,
+        team_key: str,
         *,
         name: typing.Optional[str] = OMIT,
-        color: typing.Optional[PipelineStageColor] = OMIT,
+        sharing_restricted_to_team: typing.Optional[bool] = OMIT,
+        automatically_approve_join_requests: typing.Optional[bool] = OMIT,
+        automatically_send_invoice_emails: typing.Optional[bool] = OMIT,
+        emails_to_send_invoice_to: typing.Optional[typing.Sequence[str]] = OMIT,
+        members: typing.Optional[typing.Sequence[TeamMemberUpdate]] = OMIT,
+        contact_org_list_permissions: typing.Optional[
+            typing.Dict[str, typing.Optional[TeamBasedPermissionsUpdate]]
+        ] = OMIT,
+        contact_settings: typing.Optional[TeamFieldSettingsUpdate] = OMIT,
+        organization_settings: typing.Optional[TeamFieldSettingsUpdate] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[PipelineStage]:
+    ) -> HttpResponse[Team]:
         """
-        Updates the supplied stage name or colors.
+        Updates a team by key. Omitted body fields are left unchanged.
 
         Parameters
         ----------
-        pipeline_key : str
-
-        stage_key : str
+        team_key : str
+            Key for the team to update.
 
         name : typing.Optional[str]
-            Nonempty new stage name.
+            New display name for the team.
 
-        color : typing.Optional[PipelineStageColor]
-            Custom stage colors. Set both foregroundColor and backgroundColor to empty strings to reset to the pipeline theme.
+        sharing_restricted_to_team : typing.Optional[bool]
+            Whether sharing outside the team is restricted.
+
+        automatically_approve_join_requests : typing.Optional[bool]
+            Whether requests to join the team are approved automatically.
+
+        automatically_send_invoice_emails : typing.Optional[bool]
+            Whether invoice emails are sent automatically for this team.
+
+        emails_to_send_invoice_to : typing.Optional[typing.Sequence[str]]
+            Complete replacement for additional invoice-recipient email addresses. Omit to leave unchanged; send an empty set to clear.
+
+        members : typing.Optional[typing.Sequence[TeamMemberUpdate]]
+            Complete replacement roster. Omit this property to leave membership unchanged.
+
+        contact_org_list_permissions : typing.Optional[typing.Dict[str, typing.Optional[TeamBasedPermissionsUpdate]]]
+            Permission updates keyed by system list. Omitted list entries remain unchanged.
+
+        contact_settings : typing.Optional[TeamFieldSettingsUpdate]
+            Complete replacement for the team's custom contact fields. Omit to leave unchanged.
+
+        organization_settings : typing.Optional[TeamFieldSettingsUpdate]
+            Complete replacement for the team's custom organization fields. Omit to leave unchanged.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[PipelineStage]
+        HttpResponse[Team]
             OK
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v2/pipelines/{encode_path_param(pipeline_key)}/stages/{encode_path_param(stage_key)}",
+            f"v2/teams/{encode_path_param(team_key)}",
             method="POST",
             json={
                 "name": name,
-                "color": convert_and_respect_annotation_metadata(
-                    object_=color, annotation=typing.Optional[PipelineStageColor], direction="write"
+                "sharingRestrictedToTeam": sharing_restricted_to_team,
+                "automaticallyApproveJoinRequests": automatically_approve_join_requests,
+                "automaticallySendInvoiceEmails": automatically_send_invoice_emails,
+                "emailsToSendInvoiceTo": emails_to_send_invoice_to,
+                "members": convert_and_respect_annotation_metadata(
+                    object_=members, annotation=typing.Optional[typing.Sequence[TeamMemberUpdate]], direction="write"
+                ),
+                "contactOrgListPermissions": convert_and_respect_annotation_metadata(
+                    object_=contact_org_list_permissions,
+                    annotation=typing.Optional[typing.Dict[str, typing.Optional[TeamBasedPermissionsUpdate]]],
+                    direction="write",
+                ),
+                "contactSettings": convert_and_respect_annotation_metadata(
+                    object_=contact_settings, annotation=typing.Optional[TeamFieldSettingsUpdate], direction="write"
+                ),
+                "organizationSettings": convert_and_respect_annotation_metadata(
+                    object_=organization_settings,
+                    annotation=typing.Optional[TeamFieldSettingsUpdate],
+                    direction="write",
                 ),
             },
             headers={
@@ -223,9 +223,9 @@ class RawPipelineStageClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PipelineStage,
+                    Team,
                     parse_obj_as(
-                        type_=PipelineStage,  # type: ignore
+                        type_=Team,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -239,37 +239,47 @@ class RawPipelineStageClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def delete_stage(
-        self, pipeline_key: str, stage_key: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> HttpResponse[OperationResponse]:
+    def get_current_user_teams(
+        self,
+        *,
+        limit: typing.Optional[int] = None,
+        page: typing.Optional[int] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[TeamListResponse]:
         """
-        Deletes an empty stage. The final stage in a pipeline cannot be deleted.
+        Lists the teams the current user belongs to, newest first.
 
         Parameters
         ----------
-        pipeline_key : str
+        limit : typing.Optional[int]
+            Number of items to return.
 
-        stage_key : str
+        page : typing.Optional[int]
+            Zero-based page number
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[OperationResponse]
+        HttpResponse[TeamListResponse]
             OK
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"v2/pipelines/{encode_path_param(pipeline_key)}/stages/{encode_path_param(stage_key)}",
-            method="DELETE",
+            "v2/users/me/teams",
+            method="GET",
+            params={
+                "limit": limit,
+                "page": page,
+            },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    OperationResponse,
+                    TeamListResponse,
                     parse_obj_as(
-                        type_=OperationResponse,  # type: ignore
+                        type_=TeamListResponse,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -284,88 +294,43 @@ class RawPipelineStageClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
 
-class AsyncRawPipelineStageClient:
+class AsyncRawTeamsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def list_stages(
-        self, pipeline_key: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> AsyncHttpResponse[typing.Dict[str, PipelineStage]]:
-        """
-        Returns the pipeline's stages keyed by stage key.
-
-        Parameters
-        ----------
-        pipeline_key : str
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        AsyncHttpResponse[typing.Dict[str, PipelineStage]]
-            OK
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            f"v2/pipelines/{encode_path_param(pipeline_key)}/stages",
-            method="GET",
-            request_options=request_options,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    typing.Dict[str, PipelineStage],
-                    parse_obj_as(
-                        type_=typing.Dict[str, PipelineStage],  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return AsyncHttpResponse(response=_response, data=_data)
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
-        except ValidationError as e:
-            raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
-            )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
-
-    async def create_stage(
+    async def create_team(
         self,
-        pipeline_key: str,
         *,
         name: str,
-        color: typing.Optional[PipelineStageColor] = OMIT,
+        members: typing.Sequence[TeamMemberCreate],
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PipelineStage]:
+    ) -> AsyncHttpResponse[Team]:
         """
-        Creates a stage at the end of the pipeline's stage order.
+        Creates a team with an initial member roster.
 
         Parameters
         ----------
-        pipeline_key : str
-
         name : str
-            Nonempty name of the new stage.
+            Display name for the new team.
 
-        color : typing.Optional[PipelineStageColor]
-            Custom stage colors. Omit or set to null to use the pipeline theme.
+        members : typing.Sequence[TeamMemberCreate]
+            Initial team members. The authenticated creator must be included.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PipelineStage]
+        AsyncHttpResponse[Team]
             OK
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v2/pipelines/{encode_path_param(pipeline_key)}/stages",
+            "v2/teams",
             method="POST",
             json={
                 "name": name,
-                "color": convert_and_respect_annotation_metadata(
-                    object_=color, annotation=typing.Optional[PipelineStageColor], direction="write"
+                "members": convert_and_respect_annotation_metadata(
+                    object_=members, annotation=typing.Sequence[TeamMemberCreate], direction="write"
                 ),
             },
             headers={
@@ -377,9 +342,9 @@ class AsyncRawPipelineStageClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PipelineStage,
+                    Team,
                     parse_obj_as(
-                        type_=PipelineStage,  # type: ignore
+                        type_=Team,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -393,37 +358,36 @@ class AsyncRawPipelineStageClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def get_stage(
-        self, pipeline_key: str, stage_key: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> AsyncHttpResponse[PipelineStage]:
+    async def get_team(
+        self, team_key: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[Team]:
         """
-        Returns a stage in a pipeline.
+        Returns a team by key.
 
         Parameters
         ----------
-        pipeline_key : str
-
-        stage_key : str
+        team_key : str
+            Key for the team to return.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PipelineStage]
+        AsyncHttpResponse[Team]
             OK
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v2/pipelines/{encode_path_param(pipeline_key)}/stages/{encode_path_param(stage_key)}",
+            f"v2/teams/{encode_path_param(team_key)}",
             method="GET",
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PipelineStage,
+                    Team,
                     parse_obj_as(
-                        type_=PipelineStage,  # type: ignore
+                        type_=Team,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -437,45 +401,90 @@ class AsyncRawPipelineStageClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def update_stage(
+    async def update_team(
         self,
-        pipeline_key: str,
-        stage_key: str,
+        team_key: str,
         *,
         name: typing.Optional[str] = OMIT,
-        color: typing.Optional[PipelineStageColor] = OMIT,
+        sharing_restricted_to_team: typing.Optional[bool] = OMIT,
+        automatically_approve_join_requests: typing.Optional[bool] = OMIT,
+        automatically_send_invoice_emails: typing.Optional[bool] = OMIT,
+        emails_to_send_invoice_to: typing.Optional[typing.Sequence[str]] = OMIT,
+        members: typing.Optional[typing.Sequence[TeamMemberUpdate]] = OMIT,
+        contact_org_list_permissions: typing.Optional[
+            typing.Dict[str, typing.Optional[TeamBasedPermissionsUpdate]]
+        ] = OMIT,
+        contact_settings: typing.Optional[TeamFieldSettingsUpdate] = OMIT,
+        organization_settings: typing.Optional[TeamFieldSettingsUpdate] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[PipelineStage]:
+    ) -> AsyncHttpResponse[Team]:
         """
-        Updates the supplied stage name or colors.
+        Updates a team by key. Omitted body fields are left unchanged.
 
         Parameters
         ----------
-        pipeline_key : str
-
-        stage_key : str
+        team_key : str
+            Key for the team to update.
 
         name : typing.Optional[str]
-            Nonempty new stage name.
+            New display name for the team.
 
-        color : typing.Optional[PipelineStageColor]
-            Custom stage colors. Set both foregroundColor and backgroundColor to empty strings to reset to the pipeline theme.
+        sharing_restricted_to_team : typing.Optional[bool]
+            Whether sharing outside the team is restricted.
+
+        automatically_approve_join_requests : typing.Optional[bool]
+            Whether requests to join the team are approved automatically.
+
+        automatically_send_invoice_emails : typing.Optional[bool]
+            Whether invoice emails are sent automatically for this team.
+
+        emails_to_send_invoice_to : typing.Optional[typing.Sequence[str]]
+            Complete replacement for additional invoice-recipient email addresses. Omit to leave unchanged; send an empty set to clear.
+
+        members : typing.Optional[typing.Sequence[TeamMemberUpdate]]
+            Complete replacement roster. Omit this property to leave membership unchanged.
+
+        contact_org_list_permissions : typing.Optional[typing.Dict[str, typing.Optional[TeamBasedPermissionsUpdate]]]
+            Permission updates keyed by system list. Omitted list entries remain unchanged.
+
+        contact_settings : typing.Optional[TeamFieldSettingsUpdate]
+            Complete replacement for the team's custom contact fields. Omit to leave unchanged.
+
+        organization_settings : typing.Optional[TeamFieldSettingsUpdate]
+            Complete replacement for the team's custom organization fields. Omit to leave unchanged.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[PipelineStage]
+        AsyncHttpResponse[Team]
             OK
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v2/pipelines/{encode_path_param(pipeline_key)}/stages/{encode_path_param(stage_key)}",
+            f"v2/teams/{encode_path_param(team_key)}",
             method="POST",
             json={
                 "name": name,
-                "color": convert_and_respect_annotation_metadata(
-                    object_=color, annotation=typing.Optional[PipelineStageColor], direction="write"
+                "sharingRestrictedToTeam": sharing_restricted_to_team,
+                "automaticallyApproveJoinRequests": automatically_approve_join_requests,
+                "automaticallySendInvoiceEmails": automatically_send_invoice_emails,
+                "emailsToSendInvoiceTo": emails_to_send_invoice_to,
+                "members": convert_and_respect_annotation_metadata(
+                    object_=members, annotation=typing.Optional[typing.Sequence[TeamMemberUpdate]], direction="write"
+                ),
+                "contactOrgListPermissions": convert_and_respect_annotation_metadata(
+                    object_=contact_org_list_permissions,
+                    annotation=typing.Optional[typing.Dict[str, typing.Optional[TeamBasedPermissionsUpdate]]],
+                    direction="write",
+                ),
+                "contactSettings": convert_and_respect_annotation_metadata(
+                    object_=contact_settings, annotation=typing.Optional[TeamFieldSettingsUpdate], direction="write"
+                ),
+                "organizationSettings": convert_and_respect_annotation_metadata(
+                    object_=organization_settings,
+                    annotation=typing.Optional[TeamFieldSettingsUpdate],
+                    direction="write",
                 ),
             },
             headers={
@@ -487,9 +496,9 @@ class AsyncRawPipelineStageClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    PipelineStage,
+                    Team,
                     parse_obj_as(
-                        type_=PipelineStage,  # type: ignore
+                        type_=Team,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -503,37 +512,47 @@ class AsyncRawPipelineStageClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def delete_stage(
-        self, pipeline_key: str, stage_key: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> AsyncHttpResponse[OperationResponse]:
+    async def get_current_user_teams(
+        self,
+        *,
+        limit: typing.Optional[int] = None,
+        page: typing.Optional[int] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[TeamListResponse]:
         """
-        Deletes an empty stage. The final stage in a pipeline cannot be deleted.
+        Lists the teams the current user belongs to, newest first.
 
         Parameters
         ----------
-        pipeline_key : str
+        limit : typing.Optional[int]
+            Number of items to return.
 
-        stage_key : str
+        page : typing.Optional[int]
+            Zero-based page number
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[OperationResponse]
+        AsyncHttpResponse[TeamListResponse]
             OK
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"v2/pipelines/{encode_path_param(pipeline_key)}/stages/{encode_path_param(stage_key)}",
-            method="DELETE",
+            "v2/users/me/teams",
+            method="GET",
+            params={
+                "limit": limit,
+                "page": page,
+            },
             request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    OperationResponse,
+                    TeamListResponse,
                     parse_obj_as(
-                        type_=OperationResponse,  # type: ignore
+                        type_=TeamListResponse,  # type: ignore
                         object_=_response.json(),
                     ),
                 )

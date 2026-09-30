@@ -1,14 +1,13 @@
 {
-  "cliVersion": "5.134.1",
+  "cliVersion": "5.140.0",
   "generatorName": "fernapi/fern-python-sdk",
-  "generatorVersion": "5.33.0",
+  "generatorVersion": "5.34.0",
   "generatorConfig": {
     "package_name": "streak_crm",
     "client_class_name": "Streak"
   },
-  "originGitCommit": "98b0a0a07b9577cf20cbe22f3b2f767bdd6269bc",
-  "originGitCommitIsDirty": true,
+  "originGitCommit": "99561f9f896e1035d6c5affa0457d21b5fbf5133",
+  "originGitCommitIsDirty": false,
   "invokedBy": "manual",
-  "requestedVersion": "0.8.1",
-  "sdkVersion": "0.8.1"
+  "sdkVersion": "0.8.2"
 }

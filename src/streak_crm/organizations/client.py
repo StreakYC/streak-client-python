@@ -9,28 +9,28 @@ from ..types.operation_response import OperationResponse
 from ..types.organization import Organization
 from ..types.organization_link_input import OrganizationLinkInput
 from ..types.organization_page import OrganizationPage
-from .raw_client import AsyncRawOrganizationClient, RawOrganizationClient
+from .raw_client import AsyncRawOrganizationsClient, RawOrganizationsClient
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
 
-class OrganizationClient:
+class OrganizationsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
-        self._raw_client = RawOrganizationClient(client_wrapper=client_wrapper)
+        self._raw_client = RawOrganizationsClient(client_wrapper=client_wrapper)
 
     @property
-    def with_raw_response(self) -> RawOrganizationClient:
+    def with_raw_response(self) -> RawOrganizationsClient:
         """
         Retrieves a raw implementation of this client that returns raw responses.
 
         Returns
         -------
-        RawOrganizationClient
+        RawOrganizationsClient
         """
         return self._raw_client
 
-    def get_organizations_in_a_batch(
+    def get_organizations(
         self, *, request: typing.Sequence[str], request_options: typing.Optional[RequestOptions] = None
     ) -> typing.Dict[str, Organization]:
         """
@@ -55,14 +55,14 @@ class OrganizationClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.organization.get_organizations_in_a_batch(
+        client.organizations.get_organizations(
             request=["string"],
         )
         """
-        _response = self._raw_client.get_organizations_in_a_batch(request=request, request_options=request_options)
+        _response = self._raw_client.get_organizations(request=request, request_options=request_options)
         return _response.data
 
-    def get_an_organization(
+    def get_organization(
         self, organization_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> Organization:
         """
@@ -88,14 +88,14 @@ class OrganizationClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.organization.get_an_organization(
+        client.organizations.get_organization(
             organization_key="organizationKey",
         )
         """
-        _response = self._raw_client.get_an_organization(organization_key, request_options=request_options)
+        _response = self._raw_client.get_organization(organization_key, request_options=request_options)
         return _response.data
 
-    def update_an_organization(
+    def update_organization(
         self,
         organization_key: str,
         *,
@@ -184,11 +184,11 @@ class OrganizationClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.organization.update_an_organization(
+        client.organizations.update_organization(
             organization_key="organizationKey",
         )
         """
-        _response = self._raw_client.update_an_organization(
+        _response = self._raw_client.update_organization(
             organization_key,
             name=name,
             other=other,
@@ -209,7 +209,7 @@ class OrganizationClient:
         )
         return _response.data
 
-    def delete_an_organization(
+    def delete_organization(
         self, organization_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> OperationResponse:
         """
@@ -235,11 +235,11 @@ class OrganizationClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.organization.delete_an_organization(
+        client.organizations.delete_organization(
             organization_key="organizationKey",
         )
         """
-        _response = self._raw_client.delete_an_organization(organization_key, request_options=request_options)
+        _response = self._raw_client.delete_organization(organization_key, request_options=request_options)
         return _response.data
 
     def list_organizations(
@@ -279,7 +279,7 @@ class OrganizationClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.organization.list_organizations(
+        client.organizations.list_organizations(
             team_key="teamKey",
         )
         """
@@ -288,7 +288,7 @@ class OrganizationClient:
         )
         return _response.data
 
-    def create_an_organization(
+    def create_organization(
         self,
         team_key: str,
         *,
@@ -369,11 +369,11 @@ class OrganizationClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.organization.create_an_organization(
+        client.organizations.create_organization(
             team_key="teamKey",
         )
         """
-        _response = self._raw_client.create_an_organization(
+        _response = self._raw_client.create_organization(
             team_key,
             get_if_existing=get_if_existing,
             name=name,
@@ -393,22 +393,22 @@ class OrganizationClient:
         return _response.data
 
 
-class AsyncOrganizationClient:
+class AsyncOrganizationsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
-        self._raw_client = AsyncRawOrganizationClient(client_wrapper=client_wrapper)
+        self._raw_client = AsyncRawOrganizationsClient(client_wrapper=client_wrapper)
 
     @property
-    def with_raw_response(self) -> AsyncRawOrganizationClient:
+    def with_raw_response(self) -> AsyncRawOrganizationsClient:
         """
         Retrieves a raw implementation of this client that returns raw responses.
 
         Returns
         -------
-        AsyncRawOrganizationClient
+        AsyncRawOrganizationsClient
         """
         return self._raw_client
 
-    async def get_organizations_in_a_batch(
+    async def get_organizations(
         self, *, request: typing.Sequence[str], request_options: typing.Optional[RequestOptions] = None
     ) -> typing.Dict[str, Organization]:
         """
@@ -438,19 +438,17 @@ class AsyncOrganizationClient:
 
 
         async def main() -> None:
-            await client.organization.get_organizations_in_a_batch(
+            await client.organizations.get_organizations(
                 request=["string"],
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.get_organizations_in_a_batch(
-            request=request, request_options=request_options
-        )
+        _response = await self._raw_client.get_organizations(request=request, request_options=request_options)
         return _response.data
 
-    async def get_an_organization(
+    async def get_organization(
         self, organization_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> Organization:
         """
@@ -481,17 +479,17 @@ class AsyncOrganizationClient:
 
 
         async def main() -> None:
-            await client.organization.get_an_organization(
+            await client.organizations.get_organization(
                 organization_key="organizationKey",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.get_an_organization(organization_key, request_options=request_options)
+        _response = await self._raw_client.get_organization(organization_key, request_options=request_options)
         return _response.data
 
-    async def update_an_organization(
+    async def update_organization(
         self,
         organization_key: str,
         *,
@@ -585,14 +583,14 @@ class AsyncOrganizationClient:
 
 
         async def main() -> None:
-            await client.organization.update_an_organization(
+            await client.organizations.update_organization(
                 organization_key="organizationKey",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.update_an_organization(
+        _response = await self._raw_client.update_organization(
             organization_key,
             name=name,
             other=other,
@@ -613,7 +611,7 @@ class AsyncOrganizationClient:
         )
         return _response.data
 
-    async def delete_an_organization(
+    async def delete_organization(
         self, organization_key: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> OperationResponse:
         """
@@ -644,14 +642,14 @@ class AsyncOrganizationClient:
 
 
         async def main() -> None:
-            await client.organization.delete_an_organization(
+            await client.organizations.delete_organization(
                 organization_key="organizationKey",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.delete_an_organization(organization_key, request_options=request_options)
+        _response = await self._raw_client.delete_organization(organization_key, request_options=request_options)
         return _response.data
 
     async def list_organizations(
@@ -696,7 +694,7 @@ class AsyncOrganizationClient:
 
 
         async def main() -> None:
-            await client.organization.list_organizations(
+            await client.organizations.list_organizations(
                 team_key="teamKey",
             )
 
@@ -708,7 +706,7 @@ class AsyncOrganizationClient:
         )
         return _response.data
 
-    async def create_an_organization(
+    async def create_organization(
         self,
         team_key: str,
         *,
@@ -794,14 +792,14 @@ class AsyncOrganizationClient:
 
 
         async def main() -> None:
-            await client.organization.create_an_organization(
+            await client.organizations.create_organization(
                 team_key="teamKey",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.create_an_organization(
+        _response = await self._raw_client.create_organization(
             team_key,
             get_if_existing=get_if_existing,
             name=name,

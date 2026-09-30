@@ -10,28 +10,28 @@ from ..types.contact_link_input import ContactLinkInput
 from ..types.contact_page import ContactPage
 from ..types.operation_response import OperationResponse
 from ..types.organization_link_input import OrganizationLinkInput
-from .raw_client import AsyncRawContactClient, RawContactClient
+from .raw_client import AsyncRawContactsClient, RawContactsClient
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
 
-class ContactClient:
+class ContactsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
-        self._raw_client = RawContactClient(client_wrapper=client_wrapper)
+        self._raw_client = RawContactsClient(client_wrapper=client_wrapper)
 
     @property
-    def with_raw_response(self) -> RawContactClient:
+    def with_raw_response(self) -> RawContactsClient:
         """
         Retrieves a raw implementation of this client that returns raw responses.
 
         Returns
         -------
-        RawContactClient
+        RawContactsClient
         """
         return self._raw_client
 
-    def get_contacts_in_bulk(
+    def get_contacts(
         self, *, request: typing.Sequence[str], request_options: typing.Optional[RequestOptions] = None
     ) -> ContactKeyBatch:
         """
@@ -56,11 +56,11 @@ class ContactClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.contact.get_contacts_in_bulk(
+        client.contacts.get_contacts(
             request=["string"],
         )
         """
-        _response = self._raw_client.get_contacts_in_bulk(request=request, request_options=request_options)
+        _response = self._raw_client.get_contacts(request=request, request_options=request_options)
         return _response.data
 
     def get_contact(self, contact_key: str, *, request_options: typing.Optional[RequestOptions] = None) -> Contact:
@@ -87,7 +87,7 @@ class ContactClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.contact.get_contact(
+        client.contacts.get_contact(
             contact_key="contactKey",
         )
         """
@@ -187,7 +187,7 @@ class ContactClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.contact.update_contact(
+        client.contacts.update_contact(
             contact_key="contactKey",
         )
         """
@@ -239,7 +239,7 @@ class ContactClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.contact.delete_contact(
+        client.contacts.delete_contact(
             contact_key="contactKey",
         )
         """
@@ -287,7 +287,7 @@ class ContactClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.contact.list_contacts(
+        client.contacts.list_contacts(
             team_key="teamKey",
             after=1646870400,
         )
@@ -382,7 +382,7 @@ class ContactClient:
         client = Streak(
             token="YOUR_TOKEN",
         )
-        client.contact.create_contact(
+        client.contacts.create_contact(
             team_key="teamKey",
         )
         """
@@ -407,22 +407,22 @@ class ContactClient:
         return _response.data
 
 
-class AsyncContactClient:
+class AsyncContactsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
-        self._raw_client = AsyncRawContactClient(client_wrapper=client_wrapper)
+        self._raw_client = AsyncRawContactsClient(client_wrapper=client_wrapper)
 
     @property
-    def with_raw_response(self) -> AsyncRawContactClient:
+    def with_raw_response(self) -> AsyncRawContactsClient:
         """
         Retrieves a raw implementation of this client that returns raw responses.
 
         Returns
         -------
-        AsyncRawContactClient
+        AsyncRawContactsClient
         """
         return self._raw_client
 
-    async def get_contacts_in_bulk(
+    async def get_contacts(
         self, *, request: typing.Sequence[str], request_options: typing.Optional[RequestOptions] = None
     ) -> ContactKeyBatch:
         """
@@ -452,14 +452,14 @@ class AsyncContactClient:
 
 
         async def main() -> None:
-            await client.contact.get_contacts_in_bulk(
+            await client.contacts.get_contacts(
                 request=["string"],
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.get_contacts_in_bulk(request=request, request_options=request_options)
+        _response = await self._raw_client.get_contacts(request=request, request_options=request_options)
         return _response.data
 
     async def get_contact(
@@ -493,7 +493,7 @@ class AsyncContactClient:
 
 
         async def main() -> None:
-            await client.contact.get_contact(
+            await client.contacts.get_contact(
                 contact_key="contactKey",
             )
 
@@ -601,7 +601,7 @@ class AsyncContactClient:
 
 
         async def main() -> None:
-            await client.contact.update_contact(
+            await client.contacts.update_contact(
                 contact_key="contactKey",
             )
 
@@ -661,7 +661,7 @@ class AsyncContactClient:
 
 
         async def main() -> None:
-            await client.contact.delete_contact(
+            await client.contacts.delete_contact(
                 contact_key="contactKey",
             )
 
@@ -717,7 +717,7 @@ class AsyncContactClient:
 
 
         async def main() -> None:
-            await client.contact.list_contacts(
+            await client.contacts.list_contacts(
                 team_key="teamKey",
                 after=1646870400,
             )
@@ -820,7 +820,7 @@ class AsyncContactClient:
 
 
         async def main() -> None:
-            await client.contact.create_contact(
+            await client.contacts.create_contact(
                 team_key="teamKey",
             )
 
